@@ -1452,7 +1452,7 @@ function fullDps(build)
 
     for (let i = 0; i <= xmax-xmin; i++)
     {
-        dpsArray[i] = getDPS(i, build);
+        dpsArray[i] = getDPS(i+xmin, build);
         if (i > xmin)
         {
             if (dpsArray[i] == dpsArray[i-1])
@@ -1474,6 +1474,7 @@ function drawDps(build)
         return;
     
     setYMax();
+    setYMin();
     g.strokeStyle = build.color;
     g.fillStyle = build.color;
     g.lineWidth = 1.2;
@@ -1489,7 +1490,7 @@ function drawDps(build)
     g.lineTo(((9*unit)+(dpsUnitx)), ((46*unit)-(31*unit*(dpsArray[1]-ymin)/rangey)));
     g.stroke();
 
-    for (let i = 1; i < dpsArray.length; i++)
+    for (let i = 1; i <= xmax-xmin; i++)
     {
         g.beginPath();
         g.moveTo(((9*unit)+(dpsUnitx*(i-1))), ((46*unit)-(31*unit*(dpsArray[i-1]-ymin)/rangey)));
