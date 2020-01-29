@@ -1209,7 +1209,7 @@ function redraw()
         g.font = (1.6*unit).toString().concat("px Courier New");
         g.fillStyle = 'rgb(0, 0, 0)';
         g.fillText("v1.0.0", 59*unit, 65*unit);
-        g.fillText("Based on RotMG v1579087118", 48*unit, 68*unit);
+        g.fillText("Based on RotMG v1580299928", 48*unit, 68*unit);
     }
     if (weaponExpanded)
     {
