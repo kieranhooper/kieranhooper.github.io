@@ -1030,6 +1030,21 @@ canvas.addEventListener("click", function(event) {
             return;
         }
     }
+    // exit description mode
+    if (weaponExpanded || abilityExpanded || armorExpanded || ringExpanded)
+    {
+        // g.strokeRect(13*unit, 7*unit, 16.5*unit, 3*unit);
+        if (13*unit <= x && 29.5*unit >= x && 7*unit <= y && 10*unit >= y)
+        {
+            weaponExpanded = false;
+            abilityExpanded = false;
+            armorExpanded = false;
+            ringExpanded = false;
+            standard = true;
+            redraw();
+            return;
+        }
+    }
 })
 
 // i put all the drawing stuff here so that it updates every click like the original.
@@ -1040,7 +1055,7 @@ function redraw()
     g.clearRect(0,0,canvas.width,canvas.height);
     g.strokeStyle = 'rgb(0, 0, 0)';
     // shows whole canvas
-    g.fillStyle = 'rgb(180, 110, 50)';
+    g.fillStyle = 'rgb(120, 120, 150)';
     g.fillRect(0, 0, 80*unit, 70*unit);
 
     // outlined images look wonky with this off and pure sprites look wonky with it on,so
@@ -1275,8 +1290,8 @@ function redraw()
     {
         g.font = (1.6*unit).toString().concat("px Courier New");
         g.fillStyle = 'rgb(0, 0, 0)';
-        g.fillText("v1.0.0", 59*unit, 65*unit);
-        g.fillText("Based on RotMG v1581059113", 48*unit, 68*unit);
+        g.fillText("v1.1.0", 59*unit, 65*unit);
+        g.fillText("Based on RotMG v1581508574", 48*unit, 68*unit);
     }
     if (weaponExpanded)
     {
@@ -1862,8 +1877,9 @@ function drawCredits()
     g.fillText(" - niegil for help static drips", 2*unit, 35*unit);
     g.fillText(" - Wildshadow, Kabam, and DECA for the game this tool serves", 2*unit, 39*unit);
     g.font = (1.7*unit).toString().concat("px Arial");
-    g.fillText("Want to say thanks? Just find me ingame and give me a Ring of Decades.", 2*unit, 56*unit);
-    g.fillText("My in-game name is 'Baconocab.'", 2*unit, 59*unit);
+    // i just realized that this is cringe
+    /*g.fillText("Want to say thanks? Just find me ingame and give me a Ring of Decades.", 2*unit, 56*unit);
+    g.fillText("My in-game name is 'Baconocab.'", 2*unit, 59*unit);*/
 }
 
 // there is definitely a better way to do this but i dont care
@@ -1981,6 +1997,9 @@ function cssSelect(ix, iy)
 // in terms of changing stats, gear selection, etc.
 function swapClass(x)
 {
+    if (classIndex == x)
+        return;
+
     classIndex = x;
 
     if (classIndex == 1)
@@ -2370,6 +2389,13 @@ function makeItem(si)
 
 function drawDescription(p, ri)
 {
+    // obvious exit button
+    g.fillStyle = 'rgb(200, 10, 10)';
+    g.fillRect(13*unit, 7*unit, 16.5*unit, 3*unit);
+    g.strokeStyle = 'rgb(0, 0, 0)';
+    g.strokeRect(13*unit, 7*unit, 16.5*unit, 3*unit);
+    g.strokeText("Close Item Menu", 14*unit, 9*unit);
+    
     g.fillStyle = 'rgb(50, 50, 50)';
     g.fillRect(2*unit, 13*unit, 45*unit, 48*unit);
     g.font = (2.4*unit).toString().concat("px Courier New");
