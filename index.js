@@ -295,6 +295,9 @@ let cssView = false;
 let startup = true;
 let standard = false;
 let credits = false;
+let usageExplanation = false;
+
+let howToPage = 1;
 
 let optionLocations = [];
 
@@ -424,6 +427,79 @@ loadImages();
 // in the java version of this so it's more intuitive for me this way.
 const g = canvas.getContext('2d');
 
+// this class ought to make it easier for me to modify the UI
+class Button
+{
+    constructor(xbase, ybase, xsize, ysize, backgroundColor, edgeColor, textColor, textXOff, textYOff, font, textContent, imageContent, imageSmoothing)
+    {
+        this.xbase = xbase;
+        this.ybase = ybase;
+        this.xsize = xsize;
+        this.ysize = ysize;
+        this.backgroundColor = backgroundColor;
+        this.edgeColor = edgeColor;
+        this.textColor = textColor;
+        this.textXOff = textXOff;
+        this.textYOff = textYOff;
+        this.font = font;
+        this.textContent = textContent;
+        this.imageContent = imageContent;
+        this.imageSmoothing = imageSmoothing;
+    }
+    wasClicked(x, y)
+    {
+        if (x >= this.xbase && y >= this.ybase && x <= this.xbase+this.xsize && y <= this.ybase+this.ysize)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    drawButton()
+    {
+        if (this.backgroundColor != null)
+        {
+            g.fillStyle = this.backgroundColor;
+            g.fillRect(this.xbase, this.ybase, this.xsize, this.ysize);
+        }
+        if (this.textColor != null)
+        {
+            g.fillStyle = this.textColor;
+            g.font = this.font;
+            g.fillText(this.textContent, this.xbase+this.textXOff, this.ybase+this.textYOff);
+        }
+        if (this.edgeColor != null)
+        {
+            g.strokeStyle = this.edgeColor;
+            g.strokeRect(this.xbase, this.ybase, this.xsize, this.ysize);
+        }
+    }
+}
+
+let clickColor = 'rgb(190, 190, 70)';
+let scrollColor = 'rgb(110, 190, 190)';
+
+let howTo = new Button(19*unit, 65*unit, 20*unit, 3*unit, clickColor, 'rgb(0, 0, 0)', 'rgb(0, 0, 0)', 2.5*unit, 2*unit, (1.6*unit).toString().concat("px Arial"), "How to use this tool", null, false);
+
+let closeHowTo = new Button(75.5*unit, 12.5*unit, 3*unit, 3*unit, 'rgb(190, 0, 0)', 'rgb(0, 0, 0)', 'rgb(0, 0, 0)', 1*unit, 2*unit, (1.6*unit).toString().concat("px Courier New"), "X", null, false);
+let closeStats = closeHowTo;
+let openCredits = new Button(unit, 65*unit, 10*unit, 3*unit, clickColor, 'rgb(0, 0, 0)', 'rgb(0, 0, 0)', 2.5*unit, 2*unit, (1.5*unit).toString().concat("px Arial"), "Credits", null, false);
+let closeCredits = closeHowTo;
+let closeDescription = closeHowTo;
+
+let clickMe = new Button(16*unit, 20*unit, 12*unit, 3*unit, clickColor, 'rgb(0, 0, 0)', 'rgb(0, 0, 0)', 1*unit, 2*unit, (1.6*unit).toString().concat("px Courier New"), "Click Me!", null, false);
+let scrollMe = new Button(38*unit, 20*unit, 12*unit, 3*unit, scrollColor, 'rgb(0, 0, 0)', 'rgb(0, 0, 0)', 1*unit, 2*unit, (1.6*unit).toString().concat("px Courier New"), "Scroll Me!", null, false);
+
+let cursor1Box = new Button(12*unit, 50*unit, 16*unit, 4.5*unit, scrollColor, 'rgb(150, 150, 150)', 'rgb(0, 0, 0)', 1*unit, 3.5*unit, (2.1*unit).toString().concat("px Courier New"), x1CursorLoc + " Defense", null, false);
+let cursor2Box = new Button(37*unit, 50*unit, 16*unit, 4.5*unit, scrollColor, 'rgb(150, 150, 150)', 'rgb(0, 0, 0)', 1*unit, 3.5*unit, (2.1*unit).toString().concat("px Courier New"), x2CursorLoc + " Defense", null, false);
+let toggleYScaling = new Button(2.5*unit, 56*unit, 12.5*unit, 2*unit, clickColor, 'rgb(0, 0, 0)', 'rgb(0, 0, 0)', 0.5*unit, 1*unit, (1.2*unit).toString().concat("px Courier New"), "Toggle Y-Scaling", null, false);
+let scaleX = new Button(17.5*unit, 56*unit, 14*unit, 2*unit, clickColor, 'rgb(0, 0, 0)', 'rgb(0, 0, 0)', 0.5*unit, 1*unit, (1.2*unit).toString().concat("px Courier New"), "Scale x to cursors", null, false);
+let resetX = new Button(34.5*unit, 56*unit, 11.8*unit, 2*unit, clickColor, 'rgb(0, 0, 0)', 'rgb(0, 0, 0)', 0.5*unit, 1*unit, (1.2*unit).toString().concat("px Courier New"), "Reset x scaling", null, false);
+// g.strokeRect(39*unit, unit, 40*unit, 6*unit);
+let statToggle = new Button(39*unit, 1*unit, 40*unit, 6*unit, clickColor, 'rgb(0, 0, 0)', null, null, null, null, null, null, null, false);
+
 redraw();
 
 // this is the scroll tracker
@@ -434,7 +510,7 @@ canvas.addEventListener("wheel", function(event) {
 
     if (standard)
     {
-        if (x >= 12*unit && x <= 28*unit && y >= 50*unit && y <= 54.5*unit)
+        if (cursor1Box.wasClicked(x,y))
         {
             x1CursorLoc += delt;
             if (x1CursorLoc < 0)
@@ -445,10 +521,11 @@ canvas.addEventListener("wheel", function(event) {
             {
                 x1CursorLoc = x2CursorLoc - 1;
             }
+            cursor1Box.textContent = x1CursorLoc + " Defense";
             redraw();
             return;
         }
-        if (x >= 37*unit && x <= 53*unit && y >= 50*unit && y <= 54.5*unit)
+        if (cursor2Box.wasClicked(x,y))
         {
             x2CursorLoc += delt;
             if (x2CursorLoc > 999)
@@ -459,6 +536,7 @@ canvas.addEventListener("wheel", function(event) {
             {
                 x2CursorLoc = x1CursorLoc + 1;
             }
+            cursor2Box.textContent = x2CursorLoc + " Defense";
             redraw();
             return;
         }
@@ -548,6 +626,25 @@ canvas.addEventListener("wheel", function(event) {
             return;
         }
     }
+    if (usageExplanation)
+    {
+        // scroll button demo
+        if (scrollMe.wasClicked(x,y) && howToPage == 1)
+        {
+            if (scrollMe.textContent == "Scroll Me!")
+            {
+                scrollMe.textContent = Number(1);
+                redraw();
+                return;
+            }
+            else
+            {
+                scrollMe.textContent = scrollMe.textContent + delt;
+                redraw();
+                return;
+            }
+        }
+    }
 })
 
 // this is the mouseclicked tracker
@@ -566,18 +663,21 @@ canvas.addEventListener("click", function(event) {
     // click credits button
     if (standard || credits)
     {
-        if (x>= unit && x <=11*unit && y>=65*unit && y <= 68*unit)
+        if (openCredits.wasClicked(x,y))
         {
-            if (standard)
-            {
-                standard = false;
-                credits = true;
-            }
-            else
-            {
-                credits = false;
-                standard = true;
-            }
+            standard = !standard;
+            credits = !credits;
+            redraw();
+            return;
+        }
+    }
+    // close credits
+    if (credits)
+    {
+        if (closeCredits.wasClicked(x,y))
+        {
+            credits = false;
+            standard = true;
             redraw();
             return;
         }
@@ -995,14 +1095,14 @@ canvas.addEventListener("click", function(event) {
     if (standard)
     {
         // y scaling
-        if (2.5*unit <= x && 15*unit >= x && 56*unit <= y && 58*unit >= y)
+        if (toggleYScaling.wasClicked(x,y))
         {
             altYScale = !altYScale;
             redraw();
             return;
         }
         // x cursor scale
-        if (17.5*unit <= x && 31.5*unit >= x && 56*unit <= y && 58*unit >= y)
+        if (scaleX.wasClicked(x,y))
         {
             xmin = x1CursorLoc;
             xmax = x2CursorLoc;
@@ -1010,7 +1110,7 @@ canvas.addEventListener("click", function(event) {
             return;
         }
         // reset x scale
-        if (34.5*unit <= x && 46.3*unit >= x && 56*unit <= y && 58*unit >= y)
+        if (resetX.wasClicked(x,y))
         {
             xmin = 0;
             xmax = 100;
@@ -1022,10 +1122,21 @@ canvas.addEventListener("click", function(event) {
     if (standard || statChangePanel)
     {
         // g.strokeRect(39*unit, unit, 40*unit, 8*unit);
-        if (39*unit <= x && 79*unit >= x && unit <= y && 9*unit >= y)
+        if (statToggle.wasClicked(x,y))
         {
             statChangePanel = !statChangePanel;
             standard = !standard;
+            redraw();
+            return;
+        }
+    }
+    // close stat panel
+    if (statChangePanel)
+    {
+        if (closeStats.wasClicked(x,y))
+        {
+            statChangePanel = false;
+            standard = true;
             redraw();
             return;
         }
@@ -1034,7 +1145,7 @@ canvas.addEventListener("click", function(event) {
     if (weaponExpanded || abilityExpanded || armorExpanded || ringExpanded)
     {
         // g.strokeRect(13*unit, 7*unit, 16.5*unit, 3*unit);
-        if (13*unit <= x && 29.5*unit >= x && 7*unit <= y && 10*unit >= y)
+        if (closeDescription.wasClicked(x,y))
         {
             weaponExpanded = false;
             abilityExpanded = false;
@@ -1043,6 +1154,49 @@ canvas.addEventListener("click", function(event) {
             standard = true;
             redraw();
             return;
+        }
+    }
+    // open/close how-to guide
+    if (standard || usageExplanation)
+    {
+        if (howTo.wasClicked(x,y))
+        {
+            standard = !standard;
+            usageExplanation = !usageExplanation;
+            clickMe.textContent = "Click Me!";
+            scrollMe.textContent = "Scroll Me!";
+            redraw();
+            return;
+        }
+    }
+    // how-to-guide
+    if (usageExplanation)
+    {
+        // x out
+        if (closeHowTo.wasClicked(x,y))
+        {
+            usageExplanation = false;
+            standard = true;
+            clickMe.textContent = "Click Me!";
+            scrollMe.textContent = "Scroll Me!";
+            redraw();
+            return;
+        }
+        // clickable button demo
+        if (clickMe.wasClicked(x,y) && howToPage == 1)
+        {
+            if (clickMe.textContent == "Click Me!")
+            {
+                clickMe.textContent = Number(1);
+                redraw();
+                return;
+            }
+            else
+            {
+                clickMe.textContent = clickMe.textContent + 1;
+                redraw();
+                return;
+            }
         }
     }
 })
@@ -1178,13 +1332,7 @@ function redraw()
         g.drawImage(armoredIcon, 20*unit, 9.5*unit, 2*unit, 2*unit);
         g.drawImage(curseIcon, 24*unit, 9.5*unit, 2*unit, 2*unit);
         g.drawImage(exposedIcon, 28*unit, 9.5*unit, 2*unit, 2*unit);
-        g.fillStyle = 'rgb(190, 130, 180)';
-        g.fillRect(unit, 65*unit, 10*unit, 3*unit);
-        g.fillStyle = 'rgb(0, 0, 0)';
-        g.strokeRect(unit, 65*unit, 10*unit, 3*unit);
-        g.font = (1.5*unit).toString().concat("px Arial");
-        g.fillStyle = 'rgb(0, 0, 0)';
-        g.fillText("Credits", 3.5*unit, 67*unit);
+        openCredits.drawButton();
         drawDpsGraph();
     }
 
@@ -1194,7 +1342,9 @@ function redraw()
         g.font = (1.3*unit).toString().concat("px Arial");
         g.fillStyle = 'rgb(0, 0, 0)';
         g.fillText("ST set bonuses should be automatically applied, so please check before entering them manually.", 13*unit, 15*unit);
-        g.fillStyle = 'rgb(180, 180, 180)';
+        closeStats.drawButton();
+        // i did this instead of changing the rectangles into actual buttons. lol!
+        g.fillStyle = scrollColor;
         g.fillRect(25*unit, 18*unit, 10*unit, 4*unit);
         g.strokeRect(25*unit, 18*unit, 10*unit, 4*unit);
         g.fillRect(50*unit, 18*unit, 10*unit, 4*unit);
@@ -1233,23 +1383,33 @@ function redraw()
 
     // black borders
     g.strokeStyle = 'rgb(0, 0, 0)';
-    g.strokeRect(39*unit, unit, 40*unit, 8*unit);
+    if (standard || statChangePanel)
+    {
+        statToggle.backgroundColor = clickColor;
+    }
+    else
+    {
+        statToggle.backgroundColor = null;
+    }
+    statToggle.drawButton();
     g.strokeRect(39*unit, unit, 40*unit, 6*unit);
     g.strokeRect(39*unit, unit, 40*unit, 3*unit);
-    // g.strokeRect(unit, unit, 8*unit, 8*unit);
+    g.strokeRect(unit, 12*unit, 78*unit, 50*unit);
+    g.strokeRect(0, 0, 80*unit, 70*unit);
+    g.strokeRect(39*unit, unit, 30*unit, 6*unit);
+    g.strokeRect(39*unit, unit, 20*unit, 6*unit);
+    g.strokeRect(39*unit, unit, 10*unit, 6*unit);
+    
+    // item slot locations
     if (!cssView) {
         g.strokeRect(10 * unit, unit, 5 * unit, 5 * unit);
         g.strokeRect(16 * unit, unit, 5 * unit, 5 * unit);
         g.strokeRect(22 * unit, unit, 5 * unit, 5 * unit);
         g.strokeRect(28 * unit, unit, 5 * unit, 5 * unit);
     }
-    g.strokeRect(unit, 12*unit, 78*unit, 50*unit);
-    g.strokeRect(0, 0, 80*unit, 70*unit);
-    g.strokeRect(39*unit, unit, 30*unit, 6*unit);
-    g.strokeRect(39*unit, unit, 20*unit, 6*unit);
-    g.strokeRect(39*unit, unit, 10*unit, 6*unit);
+    
 
-    // text
+    // stat text
     g.font = (1.2*unit).toString().concat("px Arial");
     g.fillStyle = 'rgb(0, 0, 0)';
     g.fillText("HP: " + getStat("HP", builds[0]) + getPlusStat("HP", builds[0]), 40*unit, 3*unit);
@@ -1268,7 +1428,24 @@ function redraw()
         g.imageSmoothingEnabled = false;
     }
 
-    
+    if (standard)
+    {
+        howTo.drawButton();
+    }
+
+    if (usageExplanation)
+    {
+        howTo.drawButton();
+        closeHowTo.drawButton();
+
+        // put this in a chunk if i ever need a second page of how-to (very likely when i get to the optimize stuff)
+        g.font = (1.6*unit).toString().concat("px Arial")
+        g.fillStyle = 'rgb(0, 0, 0)';
+        g.fillText("This program is mostly navigated by clicking, but in some cases the scroll wheel may be used.", 2*unit, 16*unit);
+        g.fillText("Scroll and click locations are largely color-coded, with a few exceptions.", 2*unit, 28*unit);
+        clickMe.drawButton();
+        scrollMe.drawButton();
+    }
 
     if (credits)
     {
@@ -1290,8 +1467,8 @@ function redraw()
     {
         g.font = (1.6*unit).toString().concat("px Courier New");
         g.fillStyle = 'rgb(0, 0, 0)';
-        g.fillText("v1.1.0", 59*unit, 65*unit);
-        g.fillText("Based on RotMG v1581508574", 48*unit, 68*unit);
+        g.fillText("v1.2.0", 59*unit, 65*unit);
+        g.fillText("Based on RotMG v1582040564", 48*unit, 68*unit);
     }
     if (weaponExpanded)
     {
@@ -1416,14 +1593,11 @@ function drawDpsGraph()
     // cursor boxes
     g.font = (2.1*unit).toString().concat("px Courier New");
     g.fillStyle = 'rgb(255, 255, 255)';
-    g.fillText(x1CursorLoc + " Defense", 13*unit, 53.5*unit);
-    g.fillText(x2CursorLoc + " Defense", 38*unit, 53.5*unit);
+    cursor1Box.drawButton();
+    cursor2Box.drawButton();
     g.font = (1.2*unit).toString().concat("px Courier New");
     g.fillText("Cursor 1:", 17*unit, 51*unit);
     g.fillText("Cursor 2:", 42*unit, 51*unit);
-    g.strokeStyle = 'rgb(255, 255, 255)';
-    g.strokeRect(12*unit, 50*unit, 16*unit, 4.5*unit);
-    g.strokeRect(37*unit, 50*unit, 16*unit, 4.5*unit);
     g.strokeStyle = 'rgb(0, 0, 0)';
 
     // cursors
@@ -1447,12 +1621,9 @@ function drawDpsGraph()
     g.strokeStyle = 'rgb(200, 200, 200)';
     g.fillStyle = 'rgb(225, 225, 225)';
     g.font = (1.2*unit).toString().concat("px Courier New");
-    g.fillText("Toggle y-scaling", 3*unit, 57*unit);
-    g.strokeRect(2.5*unit, 56*unit, 12.5*unit, 2*unit);
-    g.fillText("Scale x to cursors", 18*unit, 57*unit);
-    g.strokeRect(17.5*unit, 56*unit, 14*unit, 2*unit);
-    g.fillText("Reset x scaling", 35*unit, 57*unit);
-    g.strokeRect(34.5*unit, 56*unit, 11.8*unit, 2*unit);
+    toggleYScaling.drawButton();
+    scaleX.drawButton();
+    resetX.drawButton();
     g.strokeStyle = 'rgb(0, 0, 0)';
 }
 
@@ -1859,13 +2030,7 @@ function drawCredits()
 {
     g.fillStyle = 'rgb(60, 60, 60)';
     g.fillRect(unit, 12*unit, 78*unit, 50*unit);
-    g.fillStyle = 'rgb(190, 130, 180)';
-    g.fillRect(unit, 65*unit, 10*unit, 3*unit);
-    g.fillStyle = 'rgb(0, 0, 0)';
-    g.strokeRect(unit, 65*unit, 10*unit, 3*unit);
-    g.font = (1.5*unit).toString().concat("px Arial");
-    g.fillStyle = 'rgb(0, 0, 0)';
-    g.fillText("Credits", 3.5*unit, 67*unit);
+    openCredits.drawButton();
     g.fillStyle = 'rgb(250, 250, 0)';
     g.font = (2.2*unit).toString().concat("px Arial");
     g.fillText("Made by Kieran Hooper (/u/BNaoC on reddit)", 2*unit, 16*unit);
@@ -1876,6 +2041,7 @@ function drawCredits()
     g.fillText(" - /u/lyrgard for inspiring the idea of an optimization tool", 2*unit, 31*unit);
     g.fillText(" - niegil for help static drips", 2*unit, 35*unit);
     g.fillText(" - Wildshadow, Kabam, and DECA for the game this tool serves", 2*unit, 39*unit);
+    closeCredits.drawButton();
     g.font = (1.7*unit).toString().concat("px Arial");
     // i just realized that this is cringe
     /*g.fillText("Want to say thanks? Just find me ingame and give me a Ring of Decades.", 2*unit, 56*unit);
@@ -2390,11 +2556,7 @@ function makeItem(si)
 function drawDescription(p, ri)
 {
     // obvious exit button
-    g.fillStyle = 'rgb(200, 10, 10)';
-    g.fillRect(13*unit, 7*unit, 16.5*unit, 3*unit);
-    g.strokeStyle = 'rgb(0, 0, 0)';
-    g.strokeRect(13*unit, 7*unit, 16.5*unit, 3*unit);
-    g.strokeText("Close Item Menu", 14*unit, 9*unit);
+    closeDescription.drawButton();
     
     g.fillStyle = 'rgb(50, 50, 50)';
     g.fillRect(2*unit, 13*unit, 45*unit, 48*unit);
@@ -2591,7 +2753,7 @@ function drawDescription(p, ri)
 function drawOptions(options, ri)
 {
     // the zone (here for reference)
-    // g.fillRect(48*unit, 13*unit, 30*unit, 48*unit);
+    // g.fillRect(48*unit, 13*unit, 27*unit, 48*unit);
 
     optionLocations = [];
 
@@ -2621,7 +2783,7 @@ function drawOptions(options, ri)
         colnum = 3;
     }
 
-    let scale = 30/colnum;
+    let scale = 27/colnum;
     if ((48/rownum) < scale)
     {
         scale = 48/rownum;
