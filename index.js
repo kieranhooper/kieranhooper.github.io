@@ -1666,7 +1666,7 @@ function redraw()
         g.font = (1.6*unit).toString().concat("px Courier New");
         g.fillStyle = 'rgb(0, 0, 0)';
         g.fillText("RotMG Builder v1.4.1", 59*unit, 64*unit);
-        g.fillText("Based on RotMG v1582714963", 53.25*unit, 66*unit);
+        g.fillText("Based on RotMG v1583922796", 53.25*unit, 66*unit);
         g.fillText("kieranhooper.com", 62.75*unit, 68*unit);
     }
     if (weaponExpanded)
