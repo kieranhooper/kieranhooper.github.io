@@ -1667,14 +1667,16 @@ function redraw()
         g.font = (5*unit).toString().concat("px Courier New");
         g.fillText("Click to continue,", 27*unit, 57*unit);
     }
+    // it's below this
     if (!startup)
     {
         g.font = (1.6*unit).toString().concat("px Courier New");
         g.fillStyle = 'rgb(0, 0, 0)';
-        g.fillText("RotMG Builder v1.5.0", 59*unit, 64*unit);
-        g.fillText("Based on RotMG v1586962136", 53.25*unit, 66*unit);
+        g.fillText("RotMG Builder v1.5.1", 59*unit, 64*unit);
+        g.fillText("Based on RotMG v1587115536", 53.25*unit, 66*unit);
         g.fillText("kieranhooper.com", 62.75*unit, 68*unit);
     }
+    // it's above this
     if (weaponExpanded)
     {
         drawDescription(weapon, weaponIndex);
@@ -1880,6 +1882,11 @@ function drawBuild(build, yoff, xoff)
     }
     
     // the zone
+    if (build.composite)
+    {
+        g.fillStyle = clickColor;
+        g.fillRect(63*unit - xoff, yoff + 0.5*unit, 15*unit, 4*unit);
+    }
     g.strokeStyle = build.color;
     if (xoff != 0)
     {
@@ -1891,13 +1898,13 @@ function drawBuild(build, yoff, xoff)
 
     if (build.composite)
     {
-        g.fillStyle = 'rgb(255, 255, 255)';
+        g.fillStyle = 'rgb(0, 0, 0)';
         g.font = (1.5*unit).toString().concat("px Arial");
         g.fillText("[Composite Build]", 65*unit, yoff+(2*unit));
         if (xoff == 0)
         {
             g.font = (unit).toString().concat("px Courier New");
-            g.fillStyle = 'rgb(255, 255, 255)';
+            g.fillStyle = 'rgb(0, 0, 0)';
             g.fillText(x1CursorLoc + " def DPS: " + Math.round(10*fullDps(build)[x1CursorLoc-xmin])/10, 66.5*unit, yoff+(3.5*unit));
         }
         return;
@@ -2308,8 +2315,7 @@ function drawCompositeDetails()
     g.fillStyle = 'rgb(90, 90, 90)';
     g.strokeStyle = 'rgb(255, 255, 255)';
     
-    // i should establish the other case too probably, but detection doesn't work currently
-    // so who cares
+    // 
     if (popupBuild.build1 != popupBuild.build2)
     {
         //
@@ -2330,6 +2336,24 @@ function drawCompositeDetails()
         g.font = (2.6*unit).toString().concat("px Arial");
         g.fillText("÷", 53*unit, (17+5.5*bork)*unit);
         g.fillText("+", 31*unit, (17+5.5*bork)*unit);
+    }
+    //
+    else
+    {
+        let bork = builds.indexOf(popupBuild);
+
+        g.fillRect(33*unit, (11.5+5.5*bork)*unit, 27*unit, 10*unit);
+        g.strokeRect(33*unit, (11.5+5.5*bork)*unit, 27*unit, 10*unit);
+
+        drawBuild(popupBuild.build2, (12.5+5.5*bork)*unit, 27*unit);
+
+        g.fillStyle = 'rgb(0, 0, 0)';
+        g.font = (1.6*unit).toString().concat("px Arial");
+        g.fillText("x" + popupBuild.build2factor, 41*unit, (19.5+5.5*bork)*unit);
+        g.fillText("    " + (popupBuild.divider / 2), 54*unit, (16.5+5.5*bork)*unit);
+
+        g.font = (2.6*unit).toString().concat("px Arial");
+        g.fillText("÷", 53*unit, (17+5.5*bork)*unit);
     }
 }
 
@@ -2987,6 +3011,9 @@ function drawDescription(p, ri)
     if (p.projectileSpeed * p.projectileLifetime > 0)
     {
         let riri = (p.projectileSpeed*p.projectileLifetime)/10000;
+        riri = riri * 1000;
+        riri = Math.round(riri);
+        riri = riri / 1000;
         if (p.boomerang)
         {
             riri = riri/2;
@@ -3000,6 +3027,7 @@ function drawDescription(p, ri)
 
     // i tried doing this as a while loop but when i did that the program entered an infinite loop.
     // not sure why that happened, but it's easy enough to work around anyhow so i said whatever.
+    // fingers crossed they never add a player shot that afflicts more than 2 status effects at once.
     dd = p.conditionEnemy;
     if (dd != "")
     {
