@@ -349,7 +349,7 @@ let tricksterStats = [720, 252, 65, 25, 75, 75, 40, 60];
 let sorcererStats = [670, 385, 70, 25, 60, 60, 75, 60];
 let ninjaStats = [720, 252, 70, 25, 60, 70, 60, 70];
 let samuraiStats = [720, 252, 75, 30, 55, 50, 60, 60];
-let bardStats = [670, 385, 50, 25, 55, 70, 45, 75];
+let bardStats = [670, 385, 55, 25, 55, 70, 45, 75];
 
 let classStats = [ [], wizardStats, priestStats, rogueStats, archerStats, warriorStats, knightStats,
                         paladinStats, assassinStats, necromancerStats, huntressStats, mysticStats,
