@@ -306,6 +306,7 @@ let xmin = 0;
 let xmax = 100;
 let x1CursorLoc = 0;
 let x1CursorVisible = false;
+let hoverCursorLoc = 0;
 let x2CursorLoc = 100;
 let x2CursorVisible = false;
 let ymin = 0;
@@ -653,6 +654,8 @@ let divideButton = new Button(63*unit, 30*unit, 4*unit, 4*unit, clickColor, 'rgb
 let parenOpenButton = new Button(48*unit, 35*unit, 4*unit, 4*unit, clickColor, 'rgb(0, 0, 0)', 'rgb(0, 0, 0)', 1*unit, 2.75*unit, (2.6*unit).toString().concat("px Courier New"), "(", null, false);
 let parenCloseButton = new Button(53*unit, 35*unit, 4*unit, 4*unit, clickColor, 'rgb(0, 0, 0)', 'rgb(0, 0, 0)', 1.5*unit, 2.75*unit, (2.6*unit).toString().concat("px Courier New"), ")", null, false);
 
+// test buttone
+// let mouseTrackButton = new Button(0, 0, 2*unit, 2*unit, "rgb(0, 0, 0)", "rgb(0, 0, 0)", null, 0, 0, null, null, null, false);
 
 // i started defining a bunch of buttons for all the colors when i realized
 // wow it would be smarter to do this instead
@@ -669,6 +672,58 @@ for (let i = 0; i < colors.length; i++)
 }
 
 redraw();
+
+// this is the mouse movement tracker yayay it's here
+canvas.addEventListener("mousemove", e => {
+    
+    // thinking lockout
+    if (thinking)
+    {
+        return;
+    }
+
+    let x = e.offsetX;
+    let y = e.offsetY;
+
+    // standard business
+    if (standard)
+    {
+        // if it's in the dps area, draw vertical cursor
+        if (x >= 9*unit && x <= 58*unit && y >= 15*unit && y <=46*unit)
+        {
+            redraw();
+
+            let dpsunitsize = (58*unit-9*unit)/(xmax-xmin);
+
+            hoverCursorLoc = Math.round((x-9*unit)/dpsunitsize) + xmin;
+
+            g.strokeStyle = "rgb(0, 250, 250)";
+            g.beginPath();
+            g.moveTo(((hoverCursorLoc-xmin)*dpsunitsize)+(9*unit), 15*unit);
+            g.lineTo(((hoverCursorLoc-xmin)*dpsunitsize)+(9*unit), 46*unit);
+
+            g.stroke();
+            g.closePath();
+            return;
+        }
+
+        // if you hover over a build, highlight that on the graph
+        for (let i = 0; i < compositePins.length; i++)
+        {
+            if (compositePins[i].wasClicked(x,y))
+            {
+                redraw();
+                drawDps(builds[i], 3);
+                return;
+            }
+        }
+        redraw();
+        return;
+        // if you want to add more hover stuff for standard, do it ABOVE the for loop
+        // redrawing no matter what seems like a bad idea on paper, but when you think about it who cares shut up leave me alone
+    }
+    
+})
 
 // this is the scroll tracker
 canvas.addEventListener("wheel", function(event) {
@@ -1454,17 +1509,18 @@ canvas.addEventListener("click", function(event) {
             redraw();
             return;
         }
-    }/*
+    }
     // optimize
     if (standard)
     {
+        /*
         if (openOptimize.wasClicked(x,y))
         {
             standard = !standard;
             optimizeScreen = !optimizeScreen;
             redraw();
             return;
-        }
+        }*/
     }
     // optminzie
     if (optimizeScreen)
@@ -1579,7 +1635,7 @@ canvas.addEventListener("click", function(event) {
             redraw();
             return;
         }
-    }*/
+    }
 })
 
 // i put all the drawing stuff here so that it updates every click like the original.
@@ -1885,6 +1941,8 @@ function redraw()
         pinBuild.drawButton();
 
         //openOptimize.drawButton();
+
+        //mouseTrackButton.drawButton();
     }
 
     if (optimizeScreen)
@@ -1990,8 +2048,8 @@ function redraw()
     {
         g.font = (1.6*unit).toString().concat("px Courier New");
         g.fillStyle = 'rgb(0, 0, 0)';
-        g.fillText("RotMG Builder v1.7.0", 59*unit, 64*unit);
-        g.fillText("Based on RotMG v1593011057", 53.25*unit, 66*unit);
+        g.fillText("RotMG Builder v1.8.0", 59*unit, 64*unit);
+        g.fillText("Based on RotMG v1593329303", 53.25*unit, 66*unit);
         g.fillText("kieranhooper.com", 62.75*unit, 68*unit);
     }
     // it's above this
@@ -2066,7 +2124,7 @@ function drawDpsGraph()
     for (let i = 0; i < 9; i++)
     {
         drawBuild(builds[i], (12.5+5.5*i)*unit, 0);
-        drawDps(builds[i]);
+        drawDps(builds[i], 1);
     }
 
     // axis labels aka pieces of shit
@@ -2223,7 +2281,7 @@ function drawBuild(build, yoff, xoff)
         {
             g.font = (unit).toString().concat("px Courier New");
             g.fillStyle = 'rgb(0, 0, 0)';
-            g.fillText(x1CursorLoc + " def DPS: " + Math.round(10*fullDps(build)[x1CursorLoc-xmin])/10, 66.5*unit, yoff+(3.5*unit));
+            g.fillText(hoverCursorLoc + " def DPS: " + Math.round(10*fullDps(build)[hoverCursorLoc-xmin])/10, 66.5*unit, yoff+(3.5*unit));
         }
         return;
     }
@@ -2317,7 +2375,7 @@ function drawBuild(build, yoff, xoff)
     if (xoff == 0)
     {
         g.fillStyle = 'rgb(255, 255, 255)';
-        g.fillText(x1CursorLoc + " def DPS: " + Math.round(10*getDPS(x1CursorLoc, build))/10, 66.5*unit, yoff+(3.5*unit));
+        g.fillText(hoverCursorLoc + " def DPS: " + Math.round(10*getDPS(hoverCursorLoc, build))/10, 66.5*unit, yoff+(3.5*unit));
     }
 
     // temp atk and dex boosts
@@ -2481,7 +2539,8 @@ function fullDps(build)
 }
 
 // draws the line on the graph
-function drawDps(build)
+// currently bugged for composite builds when alternate graph scaling is in effect
+function drawDps(build, fac)
 {
     if (build == null)
         return;
@@ -2492,7 +2551,7 @@ function drawDps(build)
     setYMin();
     g.strokeStyle = build.color;
     g.fillStyle = build.color;
-    g.lineWidth = 1.3;
+    g.lineWidth = 1.3 * fac;
 
     let rangex = xmax - xmin;
     let dpsUnitx = (49*unit)/rangex;
@@ -2606,6 +2665,7 @@ function toPostFix(inpArray)
         {
             arrayOut.push(inpArray[i]);
         }
+        /*
         else if (inpArray[i] == "(")
         {
             operatorStack.push(inpArray[i]);
@@ -2620,6 +2680,7 @@ function toPostFix(inpArray)
                 arrayOut.push(operatorStack.pop());
             }
         }
+        */
         else
         {
             if (operatorStack == [])
