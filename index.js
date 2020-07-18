@@ -2054,8 +2054,8 @@ function redraw()
     {
         g.font = (1.6*unit).toString().concat("px Courier New");
         g.fillStyle = 'rgb(0, 0, 0)';
-        g.fillText("RotMG Builder v1.8.0", 59*unit, 64*unit);
-        g.fillText("Based on RotMG v1593329303", 53.25*unit, 66*unit);
+        g.fillText("RotMG Builder v1.8.2", 59*unit, 64*unit);
+        g.fillText("Based on RotMG v1594809067", 53.25*unit, 66*unit);
         g.fillText("kieranhooper.com", 62.75*unit, 68*unit);
     }
     // it's above this
@@ -3884,9 +3884,16 @@ function calcTrueRange(ip, sth)
         trueran = Math.round(trueran);
         trueran = trueran/1000;
 
+        // maybe i should try to catch undefined domain but let's be real who cares
         if (trueran < 0)
         {
             return 0;
+        }
+
+        // catches true range larger than actual range
+        if (trueran > (ip.projectileSpeed * ip.projectileLifetime / 10000))
+        {
+            trueran = ip.projectileSpeed * ip.projectileLifetime / 10000;
         }
         
         return trueran;
