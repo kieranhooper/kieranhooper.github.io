@@ -2054,7 +2054,7 @@ function redraw()
     {
         g.font = (1.6*unit).toString().concat("px Courier New");
         g.fillStyle = 'rgb(0, 0, 0)';
-        g.fillText("RotMG Builder v1.8.3", 59*unit, 64*unit);
+        g.fillText("RotMG Builder v1.8.4", 59*unit, 64*unit);
         g.fillText("Based on RotMG v1594809067", 53.25*unit, 66*unit);
         g.fillText("kieranhooper.com", 62.75*unit, 68*unit);
     }
@@ -2545,7 +2545,6 @@ function fullDps(build)
 }
 
 // draws the line on the graph
-// currently bugged for composite builds when alternate graph scaling is in effect
 function drawDps(build, fac)
 {
     if (build == null)
@@ -2637,9 +2636,9 @@ function setYMin()
                 }
                 else
                 {
-                    if (fullDps(builds[i])[0] < ymin)
+                    if (fullDps(builds[i])[xmax-xmin] < ymin)
                     {
-                        ymin = fullDps(builds[i])[0];
+                        ymin = fullDps(builds[i])[xmax-xmin];
                     }
                 }
             }
@@ -3497,11 +3496,11 @@ function drawDescription(p, ri)
         let iteration = 0;
         while (ff != null)
         {
-            if (ff.length>45)
+            if (((ff.length + ee.length)>45 && iteration == 0) || (ff.length > 45))
             {
                 if (iteration == 0)
                 {
-                    let spindex = ff.lastIndexOf(" ", 45-ee.length);
+                    let spindex = ff.lastIndexOf(" ", 44-ee.length);
                     g.fillText(ff.substring(0, spindex), (3+ee.length)*unit, (20*unit)+(1.6*line*unit));
                     ff = ff.substring(spindex+1,ff.length);
                 }
