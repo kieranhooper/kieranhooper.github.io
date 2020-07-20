@@ -129,6 +129,8 @@ class Item
         this.mpCost = mpCost;
         this.cooldown = cooldown;
         this.conditionEnemy = conditionEnemy;
+        this.spriteRendered = false;
+        this.renderedSprite = null;
     }
     getSourceFile()
     {
@@ -656,6 +658,12 @@ let divideButton = new Button(63*unit, 30*unit, 4*unit, 4*unit, clickColor, 'rgb
 let parenOpenButton = new Button(48*unit, 35*unit, 4*unit, 4*unit, clickColor, 'rgb(0, 0, 0)', 'rgb(0, 0, 0)', 1*unit, 2.75*unit, (2.6*unit).toString().concat("px Courier New"), "(", null, false);
 let parenCloseButton = new Button(53*unit, 35*unit, 4*unit, 4*unit, clickColor, 'rgb(0, 0, 0)', 'rgb(0, 0, 0)', 1.5*unit, 2.75*unit, (2.6*unit).toString().concat("px Courier New"), ")", null, false);
 
+// g.fillRect(9.7 * unit, 0.7*unit, 5.6 * unit, 5.6 * unit);
+let weaponDescButton = new Button(9.7*unit, 0.7*unit, 5.6*unit, 5.6*unit, 'rgb(120, 120, 120)', 'rgb(0, 0, 0)', null, null, null, null, null, null, false);
+let abilityDescButton = new Button(15.7*unit, 0.7*unit, 5.6*unit, 5.6*unit, 'rgb(120, 120, 120)', 'rgb(0, 0, 0)', null, null, null, null, null, null, false);
+let armorDescButton = new Button(21.7*unit, 0.7*unit, 5.6*unit, 5.6*unit, 'rgb(120, 120, 120)', 'rgb(0, 0, 0)', null, null, null, null, null, null, false);
+let ringDescButton = new Button(27.7*unit, 0.7*unit, 5.6*unit, 5.6*unit, 'rgb(120, 120, 120)', 'rgb(0, 0, 0)', null, null, null, null, null, null, false);
+
 // test buttone
 // let mouseTrackButton = new Button(0, 0, 2*unit, 2*unit, "rgb(0, 0, 0)", "rgb(0, 0, 0)", null, 0, 0, null, null, null, false);
 
@@ -1023,7 +1031,7 @@ canvas.addEventListener("click", function(event) {
     // click on item sprite
     if (standard || weaponExpanded || abilityExpanded || armorExpanded || ringExpanded)
     {
-        if (x >= 10*unit && x <= 15*unit && y >= unit && y <= 6*unit)
+        if (weaponDescButton.wasClicked(x,y))
         {
             if (weaponExpanded)
             {
@@ -1046,7 +1054,7 @@ canvas.addEventListener("click", function(event) {
     }
     if (standard || weaponExpanded || abilityExpanded || armorExpanded || ringExpanded)
     {
-        if (x >= 16*unit && x <= 21*unit && y >= unit && y <= 6*unit)
+        if (abilityDescButton.wasClicked(x,y))
         {
             if (abilityExpanded)
             {
@@ -1069,7 +1077,7 @@ canvas.addEventListener("click", function(event) {
     }
     if (standard || weaponExpanded || abilityExpanded || armorExpanded || ringExpanded)
     {
-        if (x >= 22*unit && x <= 27*unit && y >= unit && y <= 6*unit)
+        if (armorDescButton.wasClicked(x,y))
         {
             if (armorExpanded)
             {
@@ -1092,7 +1100,7 @@ canvas.addEventListener("click", function(event) {
     }
     if (standard || weaponExpanded || abilityExpanded || armorExpanded || ringExpanded)
     {
-        if (x >= 28*unit && x <= 33*unit && y >= unit && y <= 6*unit)
+        if (ringDescButton.wasClicked(x,y))
         {
             if (ringExpanded)
             {
@@ -1659,60 +1667,60 @@ function redraw()
     // i just swap back and forth as need be throughout the program
     if (standard || weaponExpanded || cssView || abilityExpanded || armorExpanded || ringExpanded || optimizeScreen)
     {
-    g.imageSmoothingEnabled = true;
-    // character portrait
-    switch (classIndex)
-    {
-        case 1:
-            g.drawImage(wizardp, unit, unit, 8*unit, 8*unit);
-            break;
-        case 2:
-            g.drawImage(priestp, unit, unit, 8*unit, 8*unit);
-            break;
-        case 3:
-            g.drawImage(roguep, unit, unit, 8*unit, 8*unit);
-            break;
-        case 4:
-            g.drawImage(archerp, unit, unit, 8*unit, 8*unit);
-            break;
-        case 5:
-            g.drawImage(warriorp, unit, unit, 8*unit, 8*unit);
-            break;
-        case 6:
-            g.drawImage(knightp, unit, unit, 8*unit, 8*unit);
-            break;
-        case 7:
-            g.drawImage(paladinp, unit, unit, 8*unit, 8*unit);
-            break;
-        case 8:
-            g.drawImage(assassinp, unit, unit, 8*unit, 8*unit);
-            break;
-        case 9:
-            g.drawImage(necromancerp, unit, unit, 8*unit, 8*unit);
-            break;
-        case 10:
-            g.drawImage(huntressp, unit, unit, 8*unit, 8*unit);
-            break;
-        case 11:
-            g.drawImage(mysticp, unit, unit, 8*unit, 8*unit);
-            break;
-        case 12:
-            g.drawImage(tricksterp, unit, unit, 8*unit, 8*unit);
-            break;
-        case 13:
-            g.drawImage(sorcererp, unit, unit, 8*unit, 8*unit);
-            break;
-        case 14:
-            g.drawImage(ninjap, unit, unit, 8*unit, 8*unit);
-            break;
-        case 15:
-            g.drawImage(samuraip, unit, unit, 8*unit, 8*unit);
-            break;
-        case 16:
-            g.drawImage(bardp, unit, unit, 8*unit, 8*unit);
-            break;
-    }
-    g.imageSmoothingEnabled = false;
+        g.imageSmoothingEnabled = true;
+        // character portrait
+        switch (classIndex)
+        {
+            case 1:
+                g.drawImage(wizardp, unit, unit, 8*unit, 8*unit);
+                break;
+            case 2:
+                g.drawImage(priestp, unit, unit, 8*unit, 8*unit);
+                break;
+            case 3:
+                g.drawImage(roguep, unit, unit, 8*unit, 8*unit);
+                break;
+            case 4:
+                g.drawImage(archerp, unit, unit, 8*unit, 8*unit);
+                break;
+            case 5:
+                g.drawImage(warriorp, unit, unit, 8*unit, 8*unit);
+                break;
+            case 6:
+                g.drawImage(knightp, unit, unit, 8*unit, 8*unit);
+                break;
+            case 7:
+                g.drawImage(paladinp, unit, unit, 8*unit, 8*unit);
+                break;
+            case 8:
+                g.drawImage(assassinp, unit, unit, 8*unit, 8*unit);
+                break;
+            case 9:
+                g.drawImage(necromancerp, unit, unit, 8*unit, 8*unit);
+                break;
+            case 10:
+                g.drawImage(huntressp, unit, unit, 8*unit, 8*unit);
+                break;
+            case 11:
+                g.drawImage(mysticp, unit, unit, 8*unit, 8*unit);
+                break;
+            case 12:
+                g.drawImage(tricksterp, unit, unit, 8*unit, 8*unit);
+                break;
+            case 13:
+                g.drawImage(sorcererp, unit, unit, 8*unit, 8*unit);
+                break;
+            case 14:
+                g.drawImage(ninjap, unit, unit, 8*unit, 8*unit);
+                break;
+            case 15:
+                g.drawImage(samuraip, unit, unit, 8*unit, 8*unit);
+                break;
+            case 16:
+                g.drawImage(bardp, unit, unit, 8*unit, 8*unit);
+                break;
+        }
+        g.imageSmoothingEnabled = false;
     }
 
     assignBuild();
@@ -1726,18 +1734,18 @@ function redraw()
     // equipment slots
     if (standard || weaponExpanded || abilityExpanded || armorExpanded || ringExpanded) {
         g.fillStyle = 'rgb(120, 120, 120)';
-        g.fillRect(10 * unit, unit, 5 * unit, 5 * unit);
+        weaponDescButton.drawButton();
         if (weapon.getSourceFile() != art)
-            g.drawImage(weapon.getSourceFile(), 8 * weapon.column, 8 * weapon.row, 8, 8, 10 * unit, unit, 5 * unit, 5 * unit);
-        g.fillRect(16 * unit, unit, 5 * unit, 5 * unit);
+            renderSprite(weapon, 10*unit, 1*unit, 5*unit, 5*unit);
+        abilityDescButton.drawButton();
         if (ability.getSourceFile() != art)
-            g.drawImage(ability.getSourceFile(), 8 * ability.column, 8 * ability.row, 8, 8, 16 * unit, unit, 5 * unit, 5 * unit);
-        g.fillRect(22 * unit, unit, 5 * unit, 5 * unit);
+            renderSprite(ability, 16*unit, 1*unit, 5*unit, 5*unit);
+        armorDescButton.drawButton();
         if (armor.getSourceFile() != art)
-            g.drawImage(armor.getSourceFile(), 8 * armor.column, 8 * armor.row, 8, 8, 22 * unit, unit, 5 * unit, 5 * unit);
-        g.fillRect(28 * unit, unit, 5 * unit, 5 * unit);
+            renderSprite(armor, 22*unit, 1*unit, 5*unit, 5*unit);
+        ringDescButton.drawButton();
         if (ring.getSourceFile() != art)
-            g.drawImage(ring.getSourceFile(), 8 * ring.column, 8 * ring.row, 8, 8, 28 * unit, unit, 5 * unit, 5 * unit);
+            renderSprite(ring, 28*unit, 1*unit, 5*unit, 5*unit);
     }
 
     // zone
@@ -1911,12 +1919,12 @@ function redraw()
     }
     
     // item slot locations
-    if (standard || weaponExpanded || abilityExpanded || armorExpanded || ringExpanded) {
-        g.strokeRect(10 * unit, unit, 5 * unit, 5 * unit);
-        g.strokeRect(16 * unit, unit, 5 * unit, 5 * unit);
-        g.strokeRect(22 * unit, unit, 5 * unit, 5 * unit);
-        g.strokeRect(28 * unit, unit, 5 * unit, 5 * unit);
-    }
+    /*if (standard || weaponExpanded || abilityExpanded || armorExpanded || ringExpanded) {
+        g.strokeRect(9.7 * unit, 0.7*unit, 5.6 * unit, 5.6 * unit);
+        g.strokeRect(15.7 * unit, 0.7*unit, 5.6 * unit, 5.6 * unit);
+        g.strokeRect(21.7 * unit, 0.7*unit, 5.6 * unit, 5.6 * unit);
+        g.strokeRect(27.7 * unit, 0.7*unit, 5.6 * unit, 5.6 * unit);
+    }*/
     
 
     // stat text
@@ -2054,7 +2062,7 @@ function redraw()
     {
         g.font = (1.6*unit).toString().concat("px Courier New");
         g.fillStyle = 'rgb(0, 0, 0)';
-        g.fillText("RotMG Builder v1.8.4", 59*unit, 64*unit);
+        g.fillText("RotMG Builder v1.9.0", 59*unit, 64*unit);
         g.fillText("Based on RotMG v1594809067", 53.25*unit, 66*unit);
         g.fillText("kieranhooper.com", 62.75*unit, 68*unit);
     }
@@ -2350,10 +2358,14 @@ function drawBuild(build, yoff, xoff)
     g.imageSmoothingEnabled = false;
 
     // gear
-    g.drawImage(build.weapon.getSourceFile(), 8*build.weapon.column, 8*build.weapon.row, 8, 8, 66.5*unit - xoff, yoff + (0.5*unit), 1.8*unit, 1.8*unit);
-    g.drawImage(build.ability.getSourceFile(), 8*build.ability.column, 8*build.ability.row, 8, 8, 68.55*unit - xoff, yoff + (0.5*unit), 1.8*unit, 1.8*unit);
-    g.drawImage(build.armor.getSourceFile(), 8*build.armor.column, 8*build.armor.row, 8, 8, 70.6*unit - xoff, yoff + (0.5*unit), 1.8*unit, 1.8*unit);
-    g.drawImage(build.ring.getSourceFile(), 8*build.ring.column, 8*build.ring.row, 8, 8, 72.65*unit - xoff, yoff + (0.5*unit), 1.8*unit, 1.8*unit);
+    //g.drawImage(build.weapon.getSourceFile(), 8*build.weapon.column, 8*build.weapon.row, 8, 8, 66.5*unit - xoff, yoff + (0.5*unit), 1.8*unit, 1.8*unit);
+    renderSprite(build.weapon, 66.5*unit-xoff, yoff + 0.5*unit, 1.8*unit, 1.8*unit);
+    //g.drawImage(build.ability.getSourceFile(), 8*build.ability.column, 8*build.ability.row, 8, 8, 68.55*unit - xoff, yoff + (0.5*unit), 1.8*unit, 1.8*unit);
+    renderSprite(build.ability, 68.55*unit-xoff, yoff+0.5*unit, 1.8*unit, 1.8*unit);
+    //g.drawImage(build.armor.getSourceFile(), 8*build.armor.column, 8*build.armor.row, 8, 8, 70.6*unit - xoff, yoff + (0.5*unit), 1.8*unit, 1.8*unit);
+    renderSprite(build.armor, 70.6*unit-xoff, yoff+0.5*unit, 1.8*unit, 1.8*unit);
+    //g.drawImage(build.ring.getSourceFile(), 8*build.ring.column, 8*build.ring.row, 8, 8, 72.65*unit - xoff, yoff + (0.5*unit), 1.8*unit, 1.8*unit);
+    renderSprite(build.ring, 72.65*unit - xoff, yoff+0.5*unit, 1.8*unit, 1.8*unit);
 
     // status
     g.imageSmoothingEnabled = true;
@@ -3072,6 +3084,81 @@ function swapClass(x)
     ringIndex = 0;
 }
 
+// function to make a shitty outlined sprite
+// this is a dumb way of doing it, but consider the following:
+// im too stupid to think of a better way
+//
+// thanks to: https://gist.github.com/fcalderan/951273/69b722f2fcb782ed2d2d5c4a887dcaf7903296f0
+// i was originally going to make something far less derivative
+// but it turned out i really dont understand whats going on well enough for that
+// so it's extremely similar to the sample
+function renderSprite(ii, bx, by, sx, sy)
+{
+    if (ii.spriteRendered)
+    {
+        g.drawImage(ii.renderedSprite, bx, by, sx, sy);
+        return;
+    }
+    
+    let imcan = document.createElement("canvas");
+    let imcon = imcan.getContext("2d");
+    imcan.width = 64;
+    imcan.height = 64;
+    imcon.imageSmoothingEnabled = false;
+    imcon.drawImage(ii.getSourceFile(), 8*ii.column, 8*ii.row, 8, 8, 1, 1, 56, 56);
+    imcon.drawImage(ii.getSourceFile(), 8*ii.column, 8*ii.row, 8, 8, 1, 7, 56, 56);
+    imcon.drawImage(ii.getSourceFile(), 8*ii.column, 8*ii.row, 8, 8, 7, 1, 56, 56);
+    imcon.drawImage(ii.getSourceFile(), 8*ii.column, 8*ii.row, 8, 8, 7, 7, 56, 56);
+    //g.drawImage(weapon.getSourceFile(), 8 * weapon.column, 8 * weapon.row, 8, 8, 10.5 * unit, 1.5*unit, 4 * unit, 4 * unit);
+
+    let imdat = imcon.getImageData(0, 0, 64, 64);
+    let impix = imdat.data;
+
+    for (let i = 0; i < impix.length; i += 4)
+    {
+        if (i > 3)
+        {
+            let rp = impix[i-3];
+            let gp = impix[i-2];
+            let bp = impix[i-1];
+            let ap = impix[i];
+
+            if (Math.abs(rp-ap) > 10 && Math.abs(gp-impix[i+1]) > 10 && Math.abs(bp-impix[i+2]))
+            {
+                impix[i] = 0;
+                impix[i+1] = 0;
+                impix[i+2] = 0;
+                //impix[i] = 1;
+            }
+            else
+            {
+                // yeah the other condition is probably not necessary tbqh
+                // unfortunately im too stupid to attempt anything more interesting here
+                if (impix[i] < 256 || impix[i+1] < 256 || impix[i+2] < 256)
+                {
+                    impix[i] = 0;
+                    impix[i+1] = 0;
+                    impix[i+2] = 0;
+                }
+            }
+        }
+    }
+
+    imcon.clearRect(0, 0, 64, 64);
+    imcon.putImageData(imdat, 0, 0);
+    imcon.drawImage(ii.getSourceFile(), 8 * ii.column, 8 * ii.row, 8, 8, 4, 4, 56, 56);
+
+    /*g.putImageData(imdat, 40*unit, 65*unit);
+    g.drawImage(ii.getSourceFile(), 8 * ii.column, 8 * ii.row, 8, 8, 40 * unit + 3, 65*unit + 3, 56, 56);*/
+
+    let renderedSprite = new Image();
+    renderedSprite.addEventListener('load', function(){g.drawImage(renderedSprite, bx, by, sx, sy)}, false);
+    renderedSprite.src = imcan.toDataURL();
+    ii.spriteRendered = true;
+    ii.renderedSprite = renderedSprite;
+    //return renderedSprite;
+}
+
 // i jus wanna load the images ahead of time rather than doing it each time
 // i couldn't figure out how to load them procedurally though unfortunately. oh well.
 function loadImages()
@@ -3480,11 +3567,12 @@ function drawDescription(p, ri)
     }
     // maybe option to collapse/expand tooltip
     dd = p.toolTip;
+    // this overflows if the tooltip name is too long
     while (dd != "")
     {
         g.fillStyle = 'rgb(200, 200, 0)';
-        let ee = dd.substring(dd.indexOf("name=\"")+6, dd.indexOf("\"", dd.indexOf("name=\"")+6)) +": ";
-        if (ee == ": ")
+        let ee = dd.substring(dd.indexOf("name=\"")+6, dd.indexOf("\"", dd.indexOf("name=\"")+6)) +":";
+        if (ee == ":")
         {
             ee = "";
         }
@@ -3545,7 +3633,7 @@ function drawDescription(p, ri)
     }
 
     //line += 1.6;
-    if (p.baseDamage != 0 && p.maxDamage != 0 && p.baseDamage != p.maxDamage)
+    if (p.maxDamage != 0 && p.baseDamage != p.maxDamage)
     {
         g.fillText("Damage: " + p.baseDamage + " - " + p.maxDamage, 3*unit, (20*unit)+(1.6*line*unit));
     }
@@ -4052,7 +4140,8 @@ function drawOptions(options, ri)
     let yoffset = 0;
     for (let i = 0; i < options.length; i++)
     {
-        g.drawImage(options[i].getSourceFile(), 8*options[i].column, 8*options[i].row, 8, 8, (48+xoffset)*unit, (13+yoffset)*unit, scale*unit, scale*unit);
+        //g.drawImage(options[i].getSourceFile(), 8*options[i].column, 8*options[i].row, 8, 8, (48+xoffset)*unit, (13+yoffset)*unit, scale*unit, scale*unit);
+        renderSprite(options[i], (48+xoffset)*unit, (13+yoffset)*unit, scale*unit, scale*unit);
         optionLocations.push([(48+xoffset)*unit, (13+yoffset)*unit, (48+xoffset+scale)*unit, (13+yoffset+scale)*unit]);
         g.strokeStyle = 'rgb(20, 200, 20)';
         if (i == ri)
@@ -4063,8 +4152,8 @@ function drawOptions(options, ri)
         }
         else
         {
-            g.strokeStyle = 'rgb(80, 80, 80)';
-            g.strokeRect((48+xoffset)*unit, (13+yoffset)*unit, scale*unit, scale*unit);
+            //g.strokeStyle = 'rgb(80, 80, 80)';
+            //g.strokeRect((48+xoffset)*unit, (13+yoffset)*unit, scale*unit, scale*unit);
         }
         g.strokeStyle = 'rgb(0, 0, 0)';
         yoffset += (scale /0.85);
