@@ -305,6 +305,7 @@ let optimizeScreen = false;
 let optimizeContent = [];
 
 let hoveringBuild = false;
+let hoveringItem = false;
 
 let xmin = 0;
 let xmax = 100;
@@ -736,7 +737,40 @@ canvas.addEventListener("mousemove", e => {
         }
         // if you want to add more hover stuff for standard, do it ABOVE the for loop
     }
-    
+    // item description pages
+    if (weaponExpanded || abilityExpanded || armorExpanded || ringExpanded)
+    {
+        // item name on hover
+        if (clickOptions(x,y) > -1)
+        {
+            redraw();
+
+            let hoverOptions = [];
+            if (weaponExpanded)
+                hoverOptions = weapons;
+            else if (abilityExpanded)
+                hoverOptions = abilities;
+            else if (armorExpanded)
+                hoverOptions = armors;
+            else
+                hoverOptions = rings;
+            
+            let itemName = hoverOptions[clickOptions(x,y)].name + "   " + hoverOptions[clickOptions(x,y)].tier;
+            let noffs = itemName.length;
+
+            let indicatorPop = new Button(x-((27*noffs/25)*unit)-2.5*unit, y-2*unit, (27*noffs/25)*unit+2*unit, 4*unit, 'rgb(60, 60, 60)', 'rgb(210, 210, 210)', 'rgb(210, 210, 210', 1*unit, 2*unit, (1.8*unit).toString().concat("px Courier New"), itemName, null, false);
+            indicatorPop.drawButton();
+
+            hoveringItem = true;
+            return;
+        }
+        if (hoveringItem)
+        {
+            hoveringItem = false;
+            redraw();
+            return;
+        }
+    }
 })
 
 // this is the scroll tracker
@@ -2062,7 +2096,7 @@ function redraw()
     {
         g.font = (1.6*unit).toString().concat("px Courier New");
         g.fillStyle = 'rgb(0, 0, 0)';
-        g.fillText("RotMG Builder v1.9.0", 59*unit, 64*unit);
+        g.fillText("RotMG Builder v1.9.1", 59*unit, 64*unit);
         g.fillText("Based on RotMG v1594809067", 53.25*unit, 66*unit);
         g.fillText("kieranhooper.com", 62.75*unit, 68*unit);
     }
