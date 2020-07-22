@@ -2104,8 +2104,8 @@ function redraw()
     {
         g.font = (1.6*unit).toString().concat("px Courier New");
         g.fillStyle = 'rgb(0, 0, 0)';
-        g.fillText("RotMG Builder v1.9.2", 59*unit, 64*unit);
-        g.fillText("Based on RotMG v1594809067", 53.25*unit, 66*unit);
+        g.fillText("RotMG Builder v1.9.3", 59*unit, 64*unit);
+        g.fillText("Based on RotMG v1595440006", 53.25*unit, 66*unit);
         g.fillText("kieranhooper.com", 62.75*unit, 68*unit);
     }
     // it's above this
@@ -3613,7 +3613,11 @@ function drawDescription(p, ri)
     while (dd != "")
     {
         g.fillStyle = 'rgb(200, 200, 0)';
-        let ee = dd.substring(dd.indexOf("name=\"")+6, dd.indexOf("\"", dd.indexOf("name=\"")+6)) +":";
+        let ee = "";
+        if (dd.includes("name=\""))
+        {
+            ee = dd.substring(dd.indexOf("name=\"")+6, dd.indexOf("\"", dd.indexOf("name=\"")+6)) +":";
+        }
         if (ee == ":")
         {
             ee = "";
