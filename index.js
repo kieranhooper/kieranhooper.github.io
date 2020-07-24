@@ -620,6 +620,15 @@ let resetX = new Button(34.5*unit, 56*unit, 11.8*unit, 2*unit, clickColor, 'rgb(
 // g.strokeRect(39*unit, unit, 40*unit, 6*unit);
 let statToggle = new Button(39*unit, 1*unit, 40*unit, 6*unit, clickColor, 'rgb(0, 0, 0)', null, null, null, null, null, null, null, false);
 
+let togBerserk = new Button(10*unit, 9.5*unit, 2*unit, 2*unit, 'rgb(160, 120, 120)', 'rgb(0, 0, 0)', null, null, null, null, null, berserkIcon, true);
+let togDamaging = new Button(13*unit, 9.5*unit, 2*unit, 2*unit, 'rgb(160, 120, 120)', 'rgb(0, 0, 0)', null, null, null, null, null, damagingIcon, true);
+let togWeak = new Button(16*unit, 9.5*unit, 2*unit, 2*unit, 'rgb(160, 120, 120)', 'rgb(0, 0, 0)', null, null, null, null, null, weakIcon, true);
+let togDazed = new Button(19*unit, 9.5*unit, 2*unit, 2*unit, 'rgb(160, 120, 120)', 'rgb(0, 0, 0)', null, null, null, null, null, dazedIcon, true);
+let togArmored = new Button(22*unit, 9.5*unit, 2*unit, 2*unit, 'rgb(160, 120, 120)', 'rgb(0, 0, 0)', null, null, null, null, null, armoredIcon, true);
+let togArmorBroken = new Button(25*unit, 9.5*unit, 2*unit, 2*unit, 'rgb(160, 120, 120)', 'rgb(0, 0, 0)', null, null, null, null, null, armorBrokenIcon, true);
+let togCursed = new Button(28*unit, 9.5*unit, 2*unit, 2*unit, 'rgb(160, 120, 120)', 'rgb(0, 0, 0)', null, null, null, null, null, curseIcon, true);
+let togExposed = new Button(31*unit, 9.5*unit, 2*unit, 2*unit, 'rgb(160, 120, 120)', 'rgb(0, 0, 0)', null, null, null, null, null, exposedIcon, true);
+
 let bagTypeDisplay = new Button(44*unit, 58*unit, 3*unit, 3*unit, null, null, null, null, null, null, null, null, true);
 let stStatViewer = new Button(42*unit, 13.25*unit, 3*unit, 2.25*unit, null, clickColor, null ,null, null, null, null, null, false);
 let stBackButton = new Button(43*unit, 13.5*unit, 3.5*unit, 3.5*unit, clickColor, 'rgb(0, 0, 0)', null, null, null, null, null, backIcon, true);
@@ -695,6 +704,11 @@ canvas.addEventListener("mousemove", e => {
 
     let x = e.offsetX;
     let y = e.offsetY;
+
+    // if you ever do the hover highlighting thing, put all buttons in an array
+    // and then have a big for loop that loops through all buttons' isClicked(x,y)
+    // you can then just have an attribute of isHighlighted for Button
+    // would be like 8 lines of code to do the whole thing
 
     // standard business
     if (standard)
@@ -1196,53 +1210,56 @@ canvas.addEventListener("click", function(event) {
         return;
     }
     // status icons
-    if (standard && 16*unit <= x && 18*unit >= x && 6.5*unit <= y && 8.5*unit >= y)
+    if (standard)
     {
-        berserk = !berserk;
-        redraw();
-        return;
-    }
-    if (standard && 20*unit <= x && 22*unit >= x && 6.5*unit <= y && 8.5*unit >= y)
-    {
-        damaging = !damaging;
-        redraw();
-        return;
-    }
-    if (standard && 24*unit <= x && 26*unit >= x && 6.5*unit <= y && 8.5*unit >= y)
-    {
-        weak = !weak;
-        redraw();
-        return;
-    }
-    if (standard && 28*unit <= x && 30*unit >= x && 6.5*unit <= y && 8.5*unit >= y)
-    {
-        dazed = !dazed;
-        redraw();
-        return;
-    }
-    if (standard && 16*unit <= x && 18*unit >= x && 9.5*unit <= y && 11.5*unit >= y)
-    {
-        armorBroken = !armorBroken;
-        redraw();
-        return;
-    }
-    if (standard && 20*unit <= x && 22*unit >= x && 9.5*unit <= y && 11.5*unit >= y)
-    {
-        armored = !armored;
-        redraw();
-        return;
-    }
-    if (standard && 24*unit <= x && 26*unit >= x && 9.5*unit <= y && 11.5*unit >= y)
-    {
-        cursed = !cursed;
-        redraw();
-        return;
-    }
-    if (standard && 28*unit <= x && 30*unit >= x && 9.5*unit <= y && 11.5*unit >= y)
-    {
-        exposed = !exposed;
-        redraw();
-        return;
+        if (togBerserk.wasClicked(x,y))
+        {
+            berserk = !berserk;
+            redraw();
+            return;
+        }
+        if (togDamaging.wasClicked(x,y))
+        {
+            damaging = !damaging;
+            redraw();
+            return;
+        }
+        if (togWeak.wasClicked(x,y))
+        {
+            weak = !weak;
+            redraw();
+            return;
+        }
+        if (togDazed.wasClicked(x,y))
+        {
+            dazed = !dazed;
+            redraw();
+            return;
+        }
+        if (togArmored.wasClicked(x,y))
+        {
+            armored = !armored;
+            redraw();
+            return;
+        }
+        if (togArmorBroken.wasClicked(x,y))
+        {
+            armorBroken = !armorBroken;
+            redraw();
+            return;
+        }
+        if (togCursed.wasClicked(x,y))
+        {
+            cursed = !cursed;
+            redraw();
+            return;
+        }
+        if (togExposed.wasClicked(x,y))
+        {
+            exposed = !exposed;
+            redraw();
+            return;
+        }
     }
     // build pin toggle
     if ((standard || buildPinner) && pinBuild.wasClicked(x,y))
@@ -1795,42 +1812,47 @@ function redraw()
     g.fillRect(unit, 12*unit, 78*unit, 50*unit);
     if (standard)
     {
-        // this is a lot of lines for some icons
-        g.fillStyle = 'rgb(0, 0, 0)';
-        g.fillRect(16*unit, 6.5*unit, 2*unit, 2*unit);
-        g.fillRect(20*unit, 6.5*unit, 2*unit, 2*unit);
-        g.fillRect(24*unit, 6.5*unit, 2*unit, 2*unit);
-        g.fillRect(28*unit, 6.5*unit, 2*unit, 2*unit);
-        g.fillRect(16*unit, 9.5*unit, 2*unit, 2*unit);
-        g.fillRect(20*unit, 9.5*unit, 2*unit, 2*unit);
-        g.fillRect(24*unit, 9.5*unit, 2*unit, 2*unit);
-        g.fillRect(28*unit, 9.5*unit, 2*unit, 2*unit);
-        g.fillStyle = 'rgb(0, 220, 0)';
         if (berserk)
-            g.fillRect(16*unit, 6.5*unit, 2*unit, 2*unit);
+            togBerserk.backgroundColor = 'rgb(0, 220, 0)';
+        else
+            togBerserk.backgroundColor = 'rgb(160, 120, 120)';
         if (damaging)
-            g.fillRect(20*unit, 6.5*unit, 2*unit, 2*unit);
+            togDamaging.backgroundColor = 'rgb(0, 220, 0)';
+        else
+            togDamaging.backgroundColor = 'rgb(160, 120, 120)';
         if (weak)
-            g.fillRect(24*unit, 6.5*unit, 2*unit, 2*unit);
+            togWeak.backgroundColor = 'rgb(0, 220, 0)';
+        else
+            togWeak.backgroundColor = 'rgb(160, 120, 120)';
         if (dazed)
-            g.fillRect(28*unit, 6.5*unit, 2*unit, 2*unit);
-        if (armorBroken)
-            g.fillRect(16*unit, 9.5*unit, 2*unit, 2*unit);
+            togDazed.backgroundColor = 'rgb(0, 220, 0)';
+        else
+            togDazed.backgroundColor = 'rgb(160, 120, 120)';
         if (armored)
-            g.fillRect(20*unit, 9.5*unit, 2*unit, 2*unit);
+            togArmored.backgroundColor = 'rgb(0, 220, 0)';
+        else
+            togArmored.backgroundColor = 'rgb(160, 120, 120)';
+        if (armorBroken)
+            togArmorBroken.backgroundColor = 'rgb(0, 220, 0)';
+        else
+            togArmorBroken.backgroundColor = 'rgb(160, 120, 120)';
         if (cursed)
-            g.fillRect(24*unit, 9.5*unit, 2*unit, 2*unit);
+            togCursed.backgroundColor = 'rgb(0, 220, 0)';
+        else
+            togCursed.backgroundColor = 'rgb(160, 120, 120)';
         if (exposed)
-            g.fillRect(28*unit, 9.5*unit, 2*unit, 2*unit);
-
-        g.drawImage(berserkIcon, 16*unit, 6.5*unit, 2*unit, 2*unit);
-        g.drawImage(damagingIcon, 20*unit, 6.5*unit, 2*unit, 2*unit);
-        g.drawImage(weakIcon, 24*unit, 6.5*unit, 2*unit, 2*unit);
-        g.drawImage(dazedIcon, 28*unit, 6.5*unit, 2*unit, 2*unit);
-        g.drawImage(armorBrokenIcon, 16*unit, 9.5*unit, 2*unit, 2*unit);
-        g.drawImage(armoredIcon, 20*unit, 9.5*unit, 2*unit, 2*unit);
-        g.drawImage(curseIcon, 24*unit, 9.5*unit, 2*unit, 2*unit);
-        g.drawImage(exposedIcon, 28*unit, 9.5*unit, 2*unit, 2*unit);
+            togExposed.backgroundColor = 'rgb(0, 220, 0)';
+        else
+            togExposed.backgroundColor = 'rgb(160, 120, 120)';
+        togBerserk.drawButton();
+        togDamaging.drawButton();
+        togWeak.drawButton();
+        togDazed.drawButton();
+        togArmored.drawButton();
+        togArmorBroken.drawButton();
+        togCursed.drawButton();
+        togExposed.drawButton();
+        
         openCredits.drawButton();
         drawDpsGraph();
     }
@@ -1959,15 +1981,6 @@ function redraw()
         g.strokeRect(39*unit, unit, 20*unit, 6*unit);
         g.strokeRect(39*unit, unit, 10*unit, 6*unit);
     }
-    
-    // item slot locations
-    /*if (standard || weaponExpanded || abilityExpanded || armorExpanded || ringExpanded) {
-        g.strokeRect(9.7 * unit, 0.7*unit, 5.6 * unit, 5.6 * unit);
-        g.strokeRect(15.7 * unit, 0.7*unit, 5.6 * unit, 5.6 * unit);
-        g.strokeRect(21.7 * unit, 0.7*unit, 5.6 * unit, 5.6 * unit);
-        g.strokeRect(27.7 * unit, 0.7*unit, 5.6 * unit, 5.6 * unit);
-    }*/
-    
 
     // stat text
     g.font = (1.2*unit).toString().concat("px Arial");
@@ -2104,7 +2117,7 @@ function redraw()
     {
         g.font = (1.6*unit).toString().concat("px Courier New");
         g.fillStyle = 'rgb(0, 0, 0)';
-        g.fillText("RotMG Builder v1.9.3", 59*unit, 64*unit);
+        g.fillText("RotMG Builder v1.9.4", 59*unit, 64*unit);
         g.fillText("Based on RotMG v1595440006", 53.25*unit, 66*unit);
         g.fillText("kieranhooper.com", 62.75*unit, 68*unit);
     }
@@ -2461,25 +2474,41 @@ function drawBuild(build, yoff, xoff)
     }
 }
 
-function shotsPerSecond(build)
+function shotsPerSecond(build, divbool)
 {
-    let outputSPS = 1.5;
-    let workDex = getStat("DEX", build);
-    if (build.dazed)
-        workDex = 0;
-    let workRof = build.weapon.rof;
-    outputSPS = ((workRof/100)*(((workDex/75)*6.5)+1.5));
-    if (build.berserk && !build.dazed)
-        outputSPS = (outputSPS * 1.5);
-    return outputSPS;
+    if (!divbool)
+    {
+        let outputSPS = 1.5;
+        let workDex = getStat("DEX", build);
+        if (build.dazed)
+            workDex = 0;
+        let workRof = build.weapon.rof;
+        outputSPS = ((workRof/100)*(((workDex/75)*6.5)+1.5));
+        if (build.berserk && !build.dazed)
+            outputSPS = (outputSPS * 1.5);
+        return outputSPS;
+    }
+    else
+    {
+        let bsps = shotsPerSecond(build, false);
+        let wosps = 1.4*bsps;
+        wosps = Math.round(wosps);
+        wosps = wosps + 1;
+        wosps = bsps/wosps;
+        return wosps;
+    }
 }
 
-function damagePerShot(build)
+function damagePerShot(build, divbool)
 {
     let inpAtk = getStat("ATK", build);
     
     let multiplier = 0;
     let range = build.weapon.maxDamage - build.weapon.baseDamage;
+    if (divbool)
+    {
+        range = 800-600;
+    }
     if (range == 0)
         range = 1;
 
@@ -2491,16 +2520,21 @@ function damagePerShot(build)
     if (build.damaging && !build.weak)
         multiplier = multiplier * 1.5;
     
+    let bosra = Number(build.weapon.baseDamage);
+    if (divbool)
+    {
+        bosra = 600;
+    }
     for (let i = 0; i < range; i++)
     {
-        let k = (multiplier * (Number(build.weapon.baseDamage) + i));
+        let k = (multiplier * (bosra + i));
         possibilities[i] = k;
     }
 
     return possibilities;
 }
 
-function getDPS(defLevel, build)
+function getDPS(defLevel, build, divbool)
 {
     if (!build.composite)
         if (build.weapon.name == "(empty slot)")
@@ -2515,8 +2549,8 @@ function getDPS(defLevel, build)
     if (build.exposed)
         defLevel = defLevel - 20;
 
-    let possibilities = damagePerShot(build);
-    let rof = shotsPerSecond(build);
+    let possibilities = damagePerShot(build, divbool);
+    let rof = shotsPerSecond(build, divbool);
 
     for (let i = 0; i < possibilities.length; i++)
     {
@@ -2550,6 +2584,18 @@ function getDPS(defLevel, build)
     
     if (avgDps < 0)
         avgDps = 0;
+
+    if (!divbool)
+    {
+        if(build.weapon.nameCode != "0x70b3")
+        {
+            return avgDps;
+        }
+        else
+        {
+            avgDps += getDPS(defLevel, build, true);
+        }
+    }
     
     return avgDps;
 }
@@ -2562,7 +2608,7 @@ function fullDps(build)
     {
         for (let i = 0; i <= xmax-xmin; i++)
         {
-            dpsArray[i] = (build.build1factor*getDPS(i+xmin, build.build1)) + (build.build2factor*getDPS(i+xmin, build.build2));
+            dpsArray[i] = (build.build1factor*getDPS(i+xmin, build.build1, false)) + (build.build2factor*getDPS(i+xmin, build.build2, false));
             dpsArray[i] = dpsArray[i] / build.divider;
             if (i+xmin > xmin)
             {
@@ -2582,7 +2628,7 @@ function fullDps(build)
     }
     for (let i = 0; i <= xmax-xmin; i++)
     {
-        dpsArray[i] = getDPS(i+xmin, build);
+        dpsArray[i] = getDPS(i+xmin, build, false);
         if (i+xmin > xmin)
         {
             if (dpsArray[i] == dpsArray[i-1])
@@ -2650,9 +2696,9 @@ function setYMax()
         {
             if (!builds[i].composite)
             {
-                if (getDPS(xmin, builds[i]) > ymax)
+                if (getDPS(xmin, builds[i], false) > ymax)
                 {
-                    ymax = getDPS(xmin, builds[i]);
+                    ymax = getDPS(xmin, builds[i], false);
                 }
             }
             else
@@ -2683,9 +2729,9 @@ function setYMin()
             {
                 if (!builds[i].composite)
                 {
-                    if (getDPS(xmax, builds[i]) < ymin)
+                    if (getDPS(xmax, builds[i], false) < ymin)
                     {
-                        ymin = getDPS(xmax, builds[i]);
+                        ymin = getDPS(xmax, builds[i], false);
                     }
                 }
                 else
@@ -3147,10 +3193,10 @@ function renderSprite(ii, bx, by, sx, sy)
     imcan.width = 64;
     imcan.height = 64;
     imcon.imageSmoothingEnabled = false;
-    imcon.drawImage(ii.getSourceFile(), 8*ii.column, 8*ii.row, 8, 8, 1, 1, 56, 56);
-    imcon.drawImage(ii.getSourceFile(), 8*ii.column, 8*ii.row, 8, 8, 1, 7, 56, 56);
-    imcon.drawImage(ii.getSourceFile(), 8*ii.column, 8*ii.row, 8, 8, 7, 1, 56, 56);
-    imcon.drawImage(ii.getSourceFile(), 8*ii.column, 8*ii.row, 8, 8, 7, 7, 56, 56);
+    imcon.drawImage(ii.getSourceFile(), 8*ii.column, 8*ii.row, 8, 8, 2, 2, 56, 56);
+    imcon.drawImage(ii.getSourceFile(), 8*ii.column, 8*ii.row, 8, 8, 2, 6, 56, 56);
+    imcon.drawImage(ii.getSourceFile(), 8*ii.column, 8*ii.row, 8, 8, 6, 2, 56, 56);
+    imcon.drawImage(ii.getSourceFile(), 8*ii.column, 8*ii.row, 8, 8, 6, 6, 56, 56);
     //g.drawImage(weapon.getSourceFile(), 8 * weapon.column, 8 * weapon.row, 8, 8, 10.5 * unit, 1.5*unit, 4 * unit, 4 * unit);
 
     let imdat = imcon.getImageData(0, 0, 64, 64);
@@ -4401,7 +4447,7 @@ function pullGear() {
             s = s.substring(s.indexOf("</Item>")+1, s.length)
         }
     
-    s = '<Item><Name>(empty slot)</Name><NameCode></NameCode><Description></Description><Tier></Tier><Filename></Filename><Row>0</Row><Column>0</Column><SetName></SetName><SlotType>10</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>0</Fame><BaseDamage>0</BaseDamage><MaxDamage>0</MaxDamage><RateOfFire>0</RateOfFire><Shots>0</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>0.0</Lifetime><Speed>0.0</Speed><ToolTip></ToolTip><BagType>0</BagType><MpCost>0</MpCost><Cooldown>0.5</Cooldown></Item><Item><Name>Magic Quiver</Name><NameCode>0xa61</NameCode><Description>A magical quiver that enchants arrows.</Description><Tier>T0</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>0</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>0</Fame></MultiHit></PassesCover><BaseDamage>60</BaseDamage><MaxDamage>100</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>1</BagType><MpCost>45</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Slowed,</ConditionEnemy></Item><Item><Name>Reinforced Quiver</Name><NameCode>0xa62</NameCode><Description>An enchanted quiver made of high-quality leather and brass.</Description><Tier>T1</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>1</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>1</DEX><VIT>0</VIT><WIS>0</WIS><Fame>0</Fame></MultiHit></PassesCover><BaseDamage>100</BaseDamage><MaxDamage>140</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>1</BagType><MpCost>50</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Slowed,</ConditionEnemy></Item><Item><Name>Iron Quiver</Name><NameCode>0xa63</NameCode><Description>A strong quiver of magical iron.</Description><Tier>T2</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>2</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>2</DEX><VIT>0</VIT><WIS>0</WIS><Fame>0</Fame></MultiHit></PassesCover><BaseDamage>140</BaseDamage><MaxDamage>180</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>1</BagType><MpCost>55</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Slowed,</ConditionEnemy></Item><Item><Name>Elvencraft Quiver</Name><NameCode>0xade</NameCode><Description>A powerful enchanting quiver made by forest elves.</Description><Tier>T3</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>3</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>3</DEX><VIT>0</VIT><WIS>0</WIS><Fame>1</Fame></MultiHit></PassesCover><BaseDamage>180</BaseDamage><MaxDamage>220</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>2</BagType><MpCost>60</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Paralyzed,</ConditionEnemy></Item><Item><Name>Magesteel Quiver</Name><NameCode>0xa64</NameCode><Description>A superior enchanting quiver made of high quality magesteel.</Description><Tier>T4</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>4</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>4</DEX><VIT>0</VIT><WIS>0</WIS><Fame>2</Fame></MultiHit></PassesCover><BaseDamage>200</BaseDamage><MaxDamage>280</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>2</BagType><MpCost>65</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Paralyzed,</ConditionEnemy></Item><Item><Name>Golden Quiver</Name><NameCode>0xa65</NameCode><Description>A quiver that shines with gold and pulses with the power of elvish archer spirits.</Description><Tier>T5</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>5</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>5</DEX><VIT>0</VIT><WIS>0</WIS><Fame>3</Fame></MultiHit></PassesCover><BaseDamage>250</BaseDamage><MaxDamage>310</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>4</BagType><MpCost>70</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Paralyzed,</ConditionEnemy></Item><Item><Name>Quiver of Elvish Mastery</Name><NameCode>0xb28</NameCode><Description>A forestcloth quiver of highest quality, exhibiting exceptional magic powers and used by the foremost masters of Elven archery.</Description><Tier>T6</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>6</Column><SetName></SetName><SlotType>15</SlotType><HP>20</HP><MP>20</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>6</DEX><VIT>0</VIT><WIS>0</WIS><Fame>4</Fame></MultiHit></PassesCover><BaseDamage>290</BaseDamage><MaxDamage>350</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>4</BagType><MpCost>75</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Paralyzed,</ConditionEnemy></Item><Item><Name>Quiver of Thunder</Name><NameCode>0xc07</NameCode><Description>This strange quiver was created in a forgotten age by a lost tribe of Dark Elves.</Description><Tier>UT</Tier><Filename>lofiObj2</Filename><Row>6</Row><Column>15</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>5</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>6</Fame></Soulbound><BaseDamage>310</BaseDamage><MaxDamage>360</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>6</BagType><MpCost>100</MpCost><Cooldown>6.0</Cooldown><ConditionEnemy>duration="4">Dazed,</ConditionEnemy></Item><Item><Name>Freezing Quiver</Name><NameCode>0x1413</NameCode><Description>Corrupted by creatures of the frost realms, its arrows will slacken assailants promptly.</Description><Tier>UT</Tier><Filename>d3LofiObjEmbed</Filename><Row>4</Row><Column>9</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>3</ATK><DEF>0</DEF><SPD>0</SPD><DEX>3</DEX><VIT>0</VIT><WIS>0</WIS><Fame>5</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>180</BaseDamage><MaxDamage>260</MaxDamage><RateOfFire>0</RateOfFire><Shots>3</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>8.0</ArcGap><Lifetime>600.0</Lifetime><Speed>160.0</Speed><ToolTip></ToolTip><BagType>4</BagType><MpCost>90</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="5">Slowed,</ConditionEnemy></Item><Item><Name>Beehemoth Quiver</Name><NameCode>0x10ed</NameCode><Description>A quiver crafted from the remains of a yellow Beehemoth, filled with razor-sharp arrows fashioned from Killer Bee stingers.</Description><Tier>UT</Tier><Filename>epicHiveObjects8x8</Filename><Row>4</Row><Column>11</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>3</ATK><DEF>0</DEF><SPD>0</SPD><DEX>3</DEX><VIT>0</VIT><WIS>0</WIS><Fame>5</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>180</BaseDamage><MaxDamage>260</MaxDamage><RateOfFire>0</RateOfFire><Shots>3</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>8.0</ArcGap><Lifetime>600.0</Lifetime><Speed>160.0</Speed><ToolTip></ToolTip><BagType>6</BagType><MpCost>90</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="5">Slowed,</ConditionEnemy></Item><Item><Name>Beehemoth Quiver</Name><NameCode>0x10f3</NameCode><Description>A quiver crafted from the remains of a red Beehemoth, filled with razor-sharp arrows fashioned from Killer Bee stingers.</Description><Tier>UT</Tier><Filename>epicHiveObjects8x8</Filename><Row>4</Row><Column>12</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>3</ATK><DEF>0</DEF><SPD>0</SPD><DEX>3</DEX><VIT>0</VIT><WIS>0</WIS><Fame>5</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>180</BaseDamage><MaxDamage>260</MaxDamage><RateOfFire>0</RateOfFire><Shots>3</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>8.0</ArcGap><Lifetime>600.0</Lifetime><Speed>160.0</Speed><ToolTip></ToolTip><BagType>6</BagType><MpCost>90</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="5">Slowed,</ConditionEnemy></Item><Item><Name>Beehemoth Quiver</Name><NameCode>0x10f2</NameCode><Description>A quiver crafted from the remains of a blue Beehemoth, filled with razor-sharp arrows fashioned from Killer Bee stingers.</Description><Tier>UT</Tier><Filename>epicHiveObjects8x8</Filename><Row>4</Row><Column>13</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>3</ATK><DEF>0</DEF><SPD>0</SPD><DEX>3</DEX><VIT>0</VIT><WIS>0</WIS><Fame>5</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>180</BaseDamage><MaxDamage>260</MaxDamage><RateOfFire>0</RateOfFire><Shots>3</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>8.0</ArcGap><Lifetime>600.0</Lifetime><Speed>160.0</Speed><ToolTip></ToolTip><BagType>6</BagType><MpCost>90</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="5">Slowed,</ConditionEnemy></Item><Item><Name>Quiver of the Shadows</Name><NameCode>0x024d</NameCode><Description>A mysterious quiver formed of pure evil and dark matter. Its ethereal existence creates a small implosion of nearby atmosphere when drawn.</Description><Tier>UT</Tier><Filename>lostHallsObjects8x8</Filename><Row>10</Row><Column>8</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>2</DEF><SPD>-2</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>6</Fame></DefIgnore></MultiHit></Soulbound><BaseDamage>400</BaseDamage><MaxDamage>500</MaxDamage><RateOfFire>0</RateOfFire><Shots>5</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>8.0</ArcGap><Lifetime>625.0</Lifetime><Speed>160.0</Speed><ToolTip></ToolTip><BagType>6</BagType><MpCost>80</MpCost><Cooldown>0.5</Cooldown></Item><Item><Name>Coalbearing Quiver</Name><NameCode>0x2090</NameCode><Description>A giant sock-like quiver woven from elventhread, concentrating evil energy into a lump of coal to create powerful arrows.\n\nSprite Credits: Dappertron</Description><Tier>UT</Tier><Filename>oryxHordeObjects8x8</Filename><Row>5</Row><Column>3</Column><SetName></SetName><SlotType>15</SlotType><HP>20</HP><MP>20</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>6</DEX><VIT>0</VIT><WIS>0</WIS><Fame>4</Fame></MultiHit></PassesCover><BaseDamage>290</BaseDamage><MaxDamage>350</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>4</BagType><MpCost>75</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Paralyzed,</ConditionEnemy></Item><Item><Name>Quiver of Dazing Love</Name><NameCode>0x6407</NameCode><Description>It truly is dazzling when you put your heart into the work!\n\nSprite Credits: WunderWafe</Description><Tier>ST</Tier><Filename>d2LofiObjEmbed</Filename><Row>6</Row><Column>6</Column><SetName>Valentine\'s Day Archer Set</SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>5</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>7</Fame></Soulbound><BaseDamage>310</BaseDamage><MaxDamage>360</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>6</BagType><MpCost>100</MpCost><Cooldown>6.0</Cooldown><ConditionEnemy>duration="4">Dazed,</ConditionEnemy></Item><Item><Name>Quintessential Quiver</Name><NameCode>0x579</NameCode><Description>Royal alchemy techniques have enabled this quiver to sharpen the gilded tips held within. Arrows loosed from the case are recognized as some of the sharpest objects known to man.</Description><Tier>ST</Tier><Filename>theMachineObjects8x8</Filename><Row>7</Row><Column>11</Column><SetName>Golden Archer Set</SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>6</Fame></Soulbound><BaseDamage>10</BaseDamage><MaxDamage>20</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>8</BagType><MpCost>70</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="0.2">Paralyzed,</ConditionEnemy></Item><Item><Name>Archerang</Name><NameCode>0x5b29</NameCode><Description>A quiver once treasured by a highly sentimental archer who just couldn\'t bear to part with her arrows forever. They\'ve become rather dull after so much recycling.</Description><Tier>UT</Tier><Filename>theMachineObjects8x8</Filename><Row>16</Row><Column>1</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>5</Fame></MultiHit></Soulbound></Boomerang><BaseDamage>50</BaseDamage><MaxDamage>100</MaxDamage><RateOfFire>0</RateOfFire><Shots>5</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>12.0</ArcGap><Lifetime>700.0</Lifetime><Speed>150.0</Speed><ToolTip>         <EffectInfo name="" description="Mistake"/>      </ToolTip><BagType>6</BagType><MpCost>75</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="2">Slowed, duration="2">Paralyzed,</ConditionEnemy></Item><Item><Name>Quiver of Shrieking Specters</Name><NameCode>0x1e45</NameCode><Description>A quiver not meant for the corporeal realm. When used by a mortal, it creates a momentary rift between death and life, briefly releasing the chilling screams of the lost.</Description><Tier>ST</Tier><Filename>d2LofiObjEmbed</Filename><Row>13</Row><Column>5</Column><SetName>Phantom Archer Set</SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>4</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>85</BaseDamage><MaxDamage>130</MaxDamage><RateOfFire>0</RateOfFire><Shots>20</Shots></Wavy><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>18.0</ArcGap><Lifetime>500.0</Lifetime><Speed>120.0</Speed><ToolTip></ToolTip><BagType>8</BagType><MpCost>120</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="2.5">Slowed,</ConditionEnemy></Item><Item><Name>Spinal Quiver</Name><NameCode>0x648b</NameCode><Description>The sternum of a long deceased adventurer. It releases a shriek when fired, making enemies shake and shudder in surprise.\n\nSprite Credits: Tero, Aurum</Description><Tier>ST</Tier><Filename>d2LofiObjEmbed</Filename><Row>23</Row><Column>1</Column><SetName>Reanimated Archer Set</SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>4</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>85</BaseDamage><MaxDamage>130</MaxDamage><RateOfFire>0</RateOfFire><Shots>20</Shots></Wavy><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>18.0</ArcGap><Lifetime>500.0</Lifetime><Speed>120.0</Speed><ToolTip></ToolTip><BagType>8</BagType><MpCost>120</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="2.5">Slowed,</ConditionEnemy></Item><Item><Name>Quiver of Thunder - Overcharged</Name><NameCode>0x7559</NameCode><Description>This strange quiver was created in a forgotten age by a lost tribe of Dark Elves.</Description><Tier>UT</Tier><Filename>lofiObj2</Filename><Row>6</Row><Column>15</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>5</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>6</Fame></Soulbound><BaseDamage>310</BaseDamage><MaxDamage>360</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>6</BagType><MpCost>100</MpCost><Cooldown>6.0</Cooldown><ConditionEnemy>duration="4">Dazed,</ConditionEnemy></Item><Item><Name>Quiver of the Autumn King</Name><NameCode>0x2057</NameCode><Description>A sun iron quiver passed through a royal elven lineage, whose legendary skills in archery have protected the forest kingdoms for millennia.</Description><Tier>T7</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>7</Column><SetName></SetName><SlotType>15</SlotType><HP>40</HP><MP>40</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>7</DEX><VIT>0</VIT><WIS>0</WIS><Fame>5</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>330</BaseDamage><MaxDamage>390</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>9</BagType><MpCost>80</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Paralyzed,</ConditionEnemy></Item><Item><Name>Quiver of Gaia</Name><NameCode>0x7082</NameCode><Description>A treasured arboreal quiver wielded by heralds of the Earth Goddess. It fires arrows of sacred life energy which smite corruption and darkness.</Description><Tier>T8</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>8</Column><SetName></SetName><SlotType>15</SlotType><HP>60</HP><MP>60</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>8</DEX><VIT>0</VIT><WIS>0</WIS><Fame>6</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>380</BaseDamage><MaxDamage>420</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>9</BagType><MpCost>85</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Paralyzed,</ConditionEnemy></Item><Item><Name>Mad Javelin</Name><NameCode>0x4f34</NameCode><Description>Oryx\'s most versatile bowmen receive javelin training, requiring a steady hand and perfect focus to inflict devastating damage.</Description><Tier>UT</Tier><Filename>d2LofiObjEmbed</Filename><Row>40</Row><Column>0</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>10</ATK><DEF>0</DEF><SPD>0</SPD><DEX>-3</DEX><VIT>0</VIT><WIS>0</WIS><Fame>5</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>800</BaseDamage><MaxDamage>1300</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>750.0</Lifetime><Speed>200.0</Speed><ToolTip>         <EffectInfo description="33% chance of increasing attack by a further 10" name="Mental Click"/>      </ToolTip><BagType>6</BagType><MpCost>120</MpCost><Cooldown>3.0</Cooldown></Item><Item><Name>StarTest</Name><NameCode>0x5279</NameCode><Description></Description><Tier>UT</Tier><Filename>d2LofiObjEmbed</Filename><Row>42</Row><Column>8</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>0</Fame></DefIgnore></MultiHit></Soulbound></Parametric><BaseDamage>400</BaseDamage><MaxDamage>400</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>3.0</Amplitude><Frequency>1.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>2000.0</Lifetime><Speed>0.0</Speed><ToolTip></ToolTip><BagType>1</BagType><MpCost>0</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Stunned,</ConditionEnemy></Item>';
+    s = '<Item><Name>(empty slot)</Name><NameCode></NameCode><Description></Description><Tier></Tier><Filename></Filename><Row>0</Row><Column>0</Column><SetName></SetName><SlotType>10</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>0</Fame><BaseDamage>0</BaseDamage><MaxDamage>0</MaxDamage><RateOfFire>0</RateOfFire><Shots>0</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>0.0</Lifetime><Speed>0.0</Speed><ToolTip></ToolTip><BagType>0</BagType><MpCost>0</MpCost><Cooldown>0.5</Cooldown></Item><Item><Name>Magic Quiver</Name><NameCode>0xa61</NameCode><Description>A magical quiver that enchants arrows.</Description><Tier>T0</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>0</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>0</Fame></MultiHit></PassesCover><BaseDamage>60</BaseDamage><MaxDamage>100</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>1</BagType><MpCost>45</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Slowed,</ConditionEnemy></Item><Item><Name>Reinforced Quiver</Name><NameCode>0xa62</NameCode><Description>An enchanted quiver made of high-quality leather and brass.</Description><Tier>T1</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>1</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>1</DEX><VIT>0</VIT><WIS>0</WIS><Fame>0</Fame></MultiHit></PassesCover><BaseDamage>100</BaseDamage><MaxDamage>140</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>1</BagType><MpCost>50</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Slowed,</ConditionEnemy></Item><Item><Name>Iron Quiver</Name><NameCode>0xa63</NameCode><Description>A strong quiver of magical iron.</Description><Tier>T2</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>2</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>2</DEX><VIT>0</VIT><WIS>0</WIS><Fame>0</Fame></MultiHit></PassesCover><BaseDamage>140</BaseDamage><MaxDamage>180</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>1</BagType><MpCost>55</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Slowed,</ConditionEnemy></Item><Item><Name>Elvencraft Quiver</Name><NameCode>0xade</NameCode><Description>A powerful enchanting quiver made by forest elves.</Description><Tier>T3</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>3</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>3</DEX><VIT>0</VIT><WIS>0</WIS><Fame>1</Fame></MultiHit></PassesCover><BaseDamage>180</BaseDamage><MaxDamage>220</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>2</BagType><MpCost>60</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Paralyzed,</ConditionEnemy></Item><Item><Name>Magesteel Quiver</Name><NameCode>0xa64</NameCode><Description>A superior enchanting quiver made of high quality magesteel.</Description><Tier>T4</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>4</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>4</DEX><VIT>0</VIT><WIS>0</WIS><Fame>2</Fame></MultiHit></PassesCover><BaseDamage>200</BaseDamage><MaxDamage>280</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>2</BagType><MpCost>65</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Paralyzed,</ConditionEnemy></Item><Item><Name>Golden Quiver</Name><NameCode>0xa65</NameCode><Description>A quiver that shines with gold and pulses with the power of elvish archer spirits.</Description><Tier>T5</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>5</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>5</DEX><VIT>0</VIT><WIS>0</WIS><Fame>3</Fame></MultiHit></PassesCover><BaseDamage>250</BaseDamage><MaxDamage>310</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>4</BagType><MpCost>70</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Paralyzed,</ConditionEnemy></Item><Item><Name>Quiver of Elvish Mastery</Name><NameCode>0xb28</NameCode><Description>A forestcloth quiver of highest quality, exhibiting exceptional magic powers and used by the foremost masters of Elven archery.</Description><Tier>T6</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>6</Column><SetName></SetName><SlotType>15</SlotType><HP>20</HP><MP>20</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>6</DEX><VIT>0</VIT><WIS>0</WIS><Fame>4</Fame></MultiHit></PassesCover><BaseDamage>290</BaseDamage><MaxDamage>350</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>4</BagType><MpCost>75</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Paralyzed,</ConditionEnemy></Item><Item><Name>Quiver of Thunder</Name><NameCode>0xc07</NameCode><Description>This strange quiver was created in a forgotten age by a lost tribe of Dark Elves.</Description><Tier>UT</Tier><Filename>lofiObj2</Filename><Row>6</Row><Column>15</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>5</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>6</Fame></Soulbound><BaseDamage>310</BaseDamage><MaxDamage>360</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>6</BagType><MpCost>100</MpCost><Cooldown>6.0</Cooldown><ConditionEnemy>duration="4">Dazed,</ConditionEnemy></Item><Item><Name>Freezing Quiver</Name><NameCode>0x1413</NameCode><Description>Corrupted by creatures of the frost realms, its arrows will slacken assailants promptly.</Description><Tier>UT</Tier><Filename>d3LofiObjEmbed</Filename><Row>4</Row><Column>9</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>3</ATK><DEF>0</DEF><SPD>0</SPD><DEX>3</DEX><VIT>0</VIT><WIS>0</WIS><Fame>5</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>180</BaseDamage><MaxDamage>260</MaxDamage><RateOfFire>0</RateOfFire><Shots>3</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>8.0</ArcGap><Lifetime>600.0</Lifetime><Speed>160.0</Speed><ToolTip></ToolTip><BagType>4</BagType><MpCost>90</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="5">Slowed,</ConditionEnemy></Item><Item><Name>Beehemoth Quiver</Name><NameCode>0x10ed</NameCode><Description>A quiver crafted from the remains of a yellow Beehemoth, filled with razor-sharp arrows fashioned from Killer Bee stingers.</Description><Tier>UT</Tier><Filename>epicHiveObjects8x8</Filename><Row>4</Row><Column>11</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>3</ATK><DEF>0</DEF><SPD>0</SPD><DEX>3</DEX><VIT>0</VIT><WIS>0</WIS><Fame>5</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>180</BaseDamage><MaxDamage>260</MaxDamage><RateOfFire>0</RateOfFire><Shots>3</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>8.0</ArcGap><Lifetime>600.0</Lifetime><Speed>160.0</Speed><ToolTip></ToolTip><BagType>6</BagType><MpCost>90</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="5">Slowed,</ConditionEnemy></Item><Item><Name>Beehemoth Quiver</Name><NameCode>0x10f3</NameCode><Description>A quiver crafted from the remains of a red Beehemoth, filled with razor-sharp arrows fashioned from Killer Bee stingers.</Description><Tier>UT</Tier><Filename>epicHiveObjects8x8</Filename><Row>4</Row><Column>12</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>3</ATK><DEF>0</DEF><SPD>0</SPD><DEX>3</DEX><VIT>0</VIT><WIS>0</WIS><Fame>5</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>180</BaseDamage><MaxDamage>260</MaxDamage><RateOfFire>0</RateOfFire><Shots>3</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>8.0</ArcGap><Lifetime>600.0</Lifetime><Speed>160.0</Speed><ToolTip></ToolTip><BagType>6</BagType><MpCost>90</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="5">Slowed,</ConditionEnemy></Item><Item><Name>Beehemoth Quiver</Name><NameCode>0x10f2</NameCode><Description>A quiver crafted from the remains of a blue Beehemoth, filled with razor-sharp arrows fashioned from Killer Bee stingers.</Description><Tier>UT</Tier><Filename>epicHiveObjects8x8</Filename><Row>4</Row><Column>13</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>3</ATK><DEF>0</DEF><SPD>0</SPD><DEX>3</DEX><VIT>0</VIT><WIS>0</WIS><Fame>5</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>180</BaseDamage><MaxDamage>260</MaxDamage><RateOfFire>0</RateOfFire><Shots>3</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>8.0</ArcGap><Lifetime>600.0</Lifetime><Speed>160.0</Speed><ToolTip></ToolTip><BagType>6</BagType><MpCost>90</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="5">Slowed,</ConditionEnemy></Item><Item><Name>Quiver of the Shadows</Name><NameCode>0x024d</NameCode><Description>A mysterious quiver formed of pure evil and dark matter. Its ethereal existence creates a small implosion of nearby atmosphere when drawn.</Description><Tier>UT</Tier><Filename>lostHallsObjects8x8</Filename><Row>10</Row><Column>8</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>2</DEF><SPD>-2</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>6</Fame></DefIgnore></MultiHit></Soulbound><BaseDamage>400</BaseDamage><MaxDamage>500</MaxDamage><RateOfFire>0</RateOfFire><Shots>5</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>8.0</ArcGap><Lifetime>625.0</Lifetime><Speed>160.0</Speed><ToolTip></ToolTip><BagType>6</BagType><MpCost>80</MpCost><Cooldown>0.5</Cooldown></Item><Item><Name>Coalbearing Quiver</Name><NameCode>0x2090</NameCode><Description>A giant sock-like quiver woven from elventhread, concentrating evil energy into a lump of coal to create powerful arrows.\n\nSprite Credits: Dappertron</Description><Tier>UT</Tier><Filename>oryxHordeObjects8x8</Filename><Row>5</Row><Column>3</Column><SetName></SetName><SlotType>15</SlotType><HP>20</HP><MP>20</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>6</DEX><VIT>0</VIT><WIS>0</WIS><Fame>4</Fame></MultiHit></PassesCover><BaseDamage>290</BaseDamage><MaxDamage>350</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>4</BagType><MpCost>75</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Paralyzed,</ConditionEnemy></Item><Item><Name>Quiver of Dazing Love</Name><NameCode>0x6407</NameCode><Description>It truly is dazzling when you put your heart into the work!\n\nSprite Credits: WunderWafe</Description><Tier>ST</Tier><Filename>d2LofiObjEmbed</Filename><Row>6</Row><Column>6</Column><SetName>Valentine\'s Day Archer Set</SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>5</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>7</Fame></Soulbound><BaseDamage>310</BaseDamage><MaxDamage>360</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>6</BagType><MpCost>100</MpCost><Cooldown>6.0</Cooldown><ConditionEnemy>duration="4">Dazed,</ConditionEnemy></Item><Item><Name>Quintessential Quiver</Name><NameCode>0x579</NameCode><Description>Royal alchemy techniques have enabled this quiver to sharpen the gilded tips held within. Arrows loosed from the case are recognized as some of the sharpest objects known to man.</Description><Tier>ST</Tier><Filename>theMachineObjects8x8</Filename><Row>7</Row><Column>11</Column><SetName>Golden Archer Set</SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>6</Fame></Soulbound><BaseDamage>10</BaseDamage><MaxDamage>20</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>8</BagType><MpCost>70</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="0.2">Paralyzed,</ConditionEnemy></Item><Item><Name>Archerang</Name><NameCode>0x5b29</NameCode><Description>A quiver once treasured by a highly sentimental archer who just couldn\'t bear to part with her arrows forever. They\'ve become rather dull after so much recycling.</Description><Tier>UT</Tier><Filename>theMachineObjects8x8</Filename><Row>16</Row><Column>1</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>5</Fame></MultiHit></Soulbound></Boomerang><BaseDamage>50</BaseDamage><MaxDamage>100</MaxDamage><RateOfFire>0</RateOfFire><Shots>5</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>12.0</ArcGap><Lifetime>700.0</Lifetime><Speed>150.0</Speed><ToolTip>         <EffectInfo name="" description="Mistake"/>      </ToolTip><BagType>6</BagType><MpCost>75</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="2">Slowed, duration="2">Paralyzed,</ConditionEnemy></Item><Item><Name>Quiver of Shrieking Specters</Name><NameCode>0x1e45</NameCode><Description>A quiver not meant for the corporeal realm. When used by a mortal, it creates a momentary rift between death and life, briefly releasing the chilling screams of the lost.</Description><Tier>ST</Tier><Filename>d2LofiObjEmbed</Filename><Row>13</Row><Column>5</Column><SetName>Phantom Archer Set</SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>4</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>85</BaseDamage><MaxDamage>130</MaxDamage><RateOfFire>0</RateOfFire><Shots>20</Shots></Wavy><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>18.0</ArcGap><Lifetime>500.0</Lifetime><Speed>120.0</Speed><ToolTip></ToolTip><BagType>8</BagType><MpCost>120</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="2.5">Slowed,</ConditionEnemy></Item><Item><Name>Spinal Quiver</Name><NameCode>0x648b</NameCode><Description>The sternum of a long deceased adventurer. It releases a shriek when fired, making enemies shake and shudder in surprise.\n\nSprite Credits: Tero, Aurum</Description><Tier>ST</Tier><Filename>d2LofiObjEmbed</Filename><Row>23</Row><Column>1</Column><SetName>Reanimated Archer Set</SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>4</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>85</BaseDamage><MaxDamage>130</MaxDamage><RateOfFire>0</RateOfFire><Shots>20</Shots></Wavy><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>18.0</ArcGap><Lifetime>500.0</Lifetime><Speed>120.0</Speed><ToolTip></ToolTip><BagType>8</BagType><MpCost>120</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="2.5">Slowed,</ConditionEnemy></Item><Item><Name>Quiver of Thunder - Overcharged</Name><NameCode>0x7559</NameCode><Description>This strange quiver was created in a forgotten age by a lost tribe of Dark Elves.</Description><Tier>UT</Tier><Filename>lofiObj2</Filename><Row>6</Row><Column>15</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>5</ATK><DEF>0</DEF><SPD>0</SPD><DEX>0</DEX><VIT>0</VIT><WIS>0</WIS><Fame>6</Fame></Soulbound><BaseDamage>310</BaseDamage><MaxDamage>360</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>6</BagType><MpCost>100</MpCost><Cooldown>6.0</Cooldown><ConditionEnemy>duration="4">Dazed,</ConditionEnemy></Item><Item><Name>Quiver of the Autumn King</Name><NameCode>0x2057</NameCode><Description>A sun iron quiver passed through a royal elven lineage, whose legendary skills in archery have protected the forest kingdoms for millennia.</Description><Tier>T7</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>7</Column><SetName></SetName><SlotType>15</SlotType><HP>40</HP><MP>40</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>7</DEX><VIT>0</VIT><WIS>0</WIS><Fame>5</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>330</BaseDamage><MaxDamage>390</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>9</BagType><MpCost>80</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Paralyzed,</ConditionEnemy></Item><Item><Name>Quiver of Gaia</Name><NameCode>0x7082</NameCode><Description>A treasured arboreal quiver wielded by heralds of the Earth Goddess. It fires arrows of sacred life energy which smite corruption and darkness.</Description><Tier>T8</Tier><Filename>lofiObj6</Filename><Row>3</Row><Column>8</Column><SetName></SetName><SlotType>15</SlotType><HP>60</HP><MP>60</MP><ATK>0</ATK><DEF>0</DEF><SPD>0</SPD><DEX>8</DEX><VIT>0</VIT><WIS>0</WIS><Fame>6</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>380</BaseDamage><MaxDamage>420</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>1000.0</Lifetime><Speed>150.0</Speed><ToolTip></ToolTip><BagType>9</BagType><MpCost>85</MpCost><Cooldown>0.5</Cooldown><ConditionEnemy>duration="3">Paralyzed,</ConditionEnemy></Item><Item><Name>Mad Javelin</Name><NameCode>0x4f34</NameCode><Description>Oryx\'s most versatile bowmen receive javelin training, requiring a steady hand and perfect focus to inflict devastating damage.</Description><Tier>UT</Tier><Filename>d2LofiObjEmbed</Filename><Row>40</Row><Column>0</Column><SetName></SetName><SlotType>15</SlotType><HP>0</HP><MP>0</MP><ATK>10</ATK><DEF>0</DEF><SPD>0</SPD><DEX>-3</DEX><VIT>0</VIT><WIS>0</WIS><Fame>5</Fame></MultiHit></Soulbound></PassesCover><BaseDamage>800</BaseDamage><MaxDamage>1300</MaxDamage><RateOfFire>0</RateOfFire><Shots>1</Shots><Amplitude>0.0</Amplitude><Frequency>0.0</Frequency><ArcGap>0.0</ArcGap><Lifetime>750.0</Lifetime><Speed>200.0</Speed><ToolTip>         <EffectInfo description="33% chance of increasing attack by a further 10" name="Mental Click"/>      </ToolTip><BagType>6</BagType><MpCost>120</MpCost><Cooldown>3.0</Cooldown></Item>';
     
     while (s.includes("<Item>"))
         {
